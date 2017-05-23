@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //mDisciplineList = new ArrayList<>();
-        reqeustBtn = (Button) findViewById(R.id.btn_request);
         url = "https://api.toornament.com/v1/disciplines";
 
         disciplineListView = (ListView) findViewById(R.id.lv_discipline);
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     if(Arrays.asList(games).contains(id)){
                         Discipline discipline = new Discipline(id,name,shortname,fullname,copyrights);
                         //mDisciplineList.add(discipline);
+
                         disciplineAdapter.add(discipline);
                         disciplineAdapter.notifyDataSetChanged();
                     }
@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
     

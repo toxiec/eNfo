@@ -5,21 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 public class DiscipleAdapter extends ArrayAdapter {
     List<Discipline> mDiscipleList = new ArrayList<>();
-
-    /*public DiscipleAdapter(Context context, int resource, ArrayList<Discipline> _list) {
-        super(context, resource);
-        mDiscipleList = _list;
-    }*/
 
     public DiscipleAdapter(Context context, int resource) {
         super(context, resource);
@@ -48,22 +42,40 @@ public class DiscipleAdapter extends ArrayAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             _convertView = layoutInflater.inflate(R.layout.disciple_row_layout, _parent, false);
             disciplineHolder = new ViewHolder();
-            disciplineHolder.disciplineName = (TextView) _convertView.findViewById(R.id.txt_discipline_name);
+            disciplineHolder.disciplineLogo = (ImageView) _convertView.findViewById(R.id.image_disciplineLogo);
             disciplineHolder.disciplineFullName = (TextView) _convertView.findViewById(R.id.txt_discipline_Fullname);
             _convertView.setTag(disciplineHolder);
 
         }else{
             disciplineHolder = (ViewHolder) _convertView.getTag();
         }
-        Discipline discipline = (Discipline) this.getItem(_position);
-        disciplineHolder.disciplineName.setText(discipline.getmId());
-        disciplineHolder.disciplineFullName.setText(discipline.getmFullname());
 
+        //Set the Values for the List Element
+        Discipline discipline = (Discipline) this.getItem(_position);
+        switch(discipline.getmId()){
+            case "counterstrike_go" : {
+                disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_csgo);
+                break;
+            }
+            case "dota2" : {
+                disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_dota2);
+                break;
+            }
+            case "hearthstone" : {
+                disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_hearthstone);
+                break;
+            }
+            case "leagueoflegends" : {
+                disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_lol);
+                break;
+            }
+        }
+        disciplineHolder.disciplineFullName.setText(discipline.getmFullname());
         return _convertView;
     }
 
     private static class ViewHolder{
-        TextView disciplineName;
+        ImageView disciplineLogo;
         TextView disciplineFullName;
     }
 }
