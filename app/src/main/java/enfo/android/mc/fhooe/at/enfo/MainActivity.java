@@ -1,9 +1,12 @@
 package enfo.android.mc.fhooe.at.enfo;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,7 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import enfo.android.mc.fhooe.at.enfo.Adapter.DiscipleAdapter;
@@ -27,35 +29,39 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 public class MainActivity extends AppCompatActivity {
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
     private final String API_KEY_HTTP_HEADER = "X-Api-Key";
-    private Button reqeustBtn;
+    private final String mDisciplesURL = "https://api.toornament.com/v1/disciplines";
     private String mJSONResult;
-    private String url;
-    private DiscipleAdapter disciplineAdapter;
-    ListView disciplineListView;
-    //private ArrayList<Discipline> mDisciplineList;
+    private DiscipleAdapter mDisciplineAdapter;
+    private ListView mDisciplineListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //mDisciplineList = new ArrayList<>();
-        url = "https://api.toornament.com/v1/disciplines";
 
-        disciplineListView = (ListView) findViewById(R.id.lv_discipline);
-        //disciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout, mDisciplineList);
-        disciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
+        mDisciplineListView = (ListView) findViewById(R.id.lv_discipline);
+        mDisciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
         getDisciplineJSON();
-        disciplineListView.setAdapter(disciplineAdapter);
+        mDisciplineListView.setAdapter(mDisciplineAdapter);
+        mDisciplineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> _adapter, View _view, int _position, long _id) {
+                Discipline discipline = (Discipline) _adapter.getItemAtPosition(_position);
+                System.out.println(discipline.getmFullname()+" has been selected");
+                Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     public void getDisciplineJSON(){
-        new JSONTask().execute(url);
+        new JSONTask().execute(mDisciplesURL);
     }
 
     public void parseDisciplineJSON(){
         String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends"};
         if(mJSONResult == null){
-            Toast.makeText(getApplicationContext(), "First Get JSON", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
         }else{
             try {
                 JSONArray jsonarray = new JSONArray(mJSONResult);
@@ -71,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                         Discipline discipline = new Discipline(id,name,shortname,fullname,copyrights);
                         //mDisciplineList.add(discipline);
 
-                        disciplineAdapter.add(discipline);
-                        disciplineAdapter.notifyDataSetChanged();
+                        mDisciplineAdapter.add(discipline);
+                        mDisciplineAdapter.notifyDataSetChanged();
                     }
                 }
             } catch (JSONException e) {
@@ -84,10 +90,13 @@ public class MainActivity extends AppCompatActivity {
     public class JSONTask extends AsyncTask<String, String, String>{
         HttpURLConnection connection = null;
         BufferedReader reader = null;
+        private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dialog.setMessage("Please Wait");
+            dialog.show();
         }
 
         @Override
@@ -129,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             mJSONResult = result;
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
             parseDisciplineJSON();
         }
     }

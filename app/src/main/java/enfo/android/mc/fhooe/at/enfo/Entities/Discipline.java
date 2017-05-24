@@ -45,5 +45,4 @@ public class Discipline {
     public void setmLogo(Image mLogo) {
         this.mLogo = mLogo;
     }
-
 }
