@@ -27,6 +27,7 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.DiscipleAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String DISCIPLINE_KEY = "discipline_key";
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
     private final String API_KEY_HTTP_HEADER = "X-Api-Key";
     private final String mDisciplesURL = "https://api.toornament.com/v1/disciplines";
@@ -48,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> _adapter, View _view, int _position, long _id) {
                 Discipline discipline = (Discipline) _adapter.getItemAtPosition(_position);
                 System.out.println(discipline.getmFullname()+" has been selected");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DISCIPLINE_KEY, discipline);
                 Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
+                i.putExtras(bundle);
                 startActivity(i);
             }
         });

@@ -1,8 +1,11 @@
 package enfo.android.mc.fhooe.at.enfo.Entities;
 
 import android.media.Image;
+import android.os.Parcelable;
 
-public class Discipline {
+import java.io.Serializable;
+
+public class Discipline implements Serializable {
     private String mId;
     private String mName;
     private String mShortname;
