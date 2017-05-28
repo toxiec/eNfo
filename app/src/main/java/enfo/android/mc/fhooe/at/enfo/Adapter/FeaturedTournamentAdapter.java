@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +23,30 @@ import enfo.android.mc.fhooe.at.enfo.R;
 
 public class FeaturedTournamentAdapter extends ArrayAdapter {
     List<FeaturedTournament> mTournamentList = new ArrayList<>();
+    Discipline mDiscipline;
+    public FeaturedTournamentAdapter(@NonNull Context context, @LayoutRes int resource, Discipline _discipline) {
+        super(context, resource);
+        mDiscipline = _discipline;
+    }
 
     /**
      * Adds a FeaturedTournament to the List which will be displayed in the ListView
      * @param _tournament
      */
-    public void add(FeaturedTournament _tournament){
+    public void add(FeaturedTournament _tournament) {
+        super.add(_tournament);
         mTournamentList.add(_tournament);
     }
 
-    public FeaturedTournamentAdapter(@NonNull Context context, @LayoutRes int resource) {
-        super(context, resource);
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return mTournamentList.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mTournamentList.size();
     }
 
     @NonNull
@@ -56,7 +71,7 @@ public class FeaturedTournamentAdapter extends ArrayAdapter {
 
         //Set the Values for the List Element
         FeaturedTournament featuredTournament = (FeaturedTournament) this.getItem(_position);
-        switch(featuredTournament.getmDiscipline()){
+        switch(mDiscipline.getmId()){
             case "counterstrike_go" : {
                 tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
                 break;
@@ -74,13 +89,17 @@ public class FeaturedTournamentAdapter extends ArrayAdapter {
                 break;
             }
         }
-        tournamentHolder.disciplineName.setText(featuredTournament.getmName());
-        tournamentHolder.date.setText((CharSequence) featuredTournament.getmDateStart());
-        tournamentHolder.tournamentName.setText(featuredTournament.getmFullName());
-        if(featuredTournament.getmLocation() != null){
-            tournamentHolder.location.setText(featuredTournament.getmLocation());
-        }else{
+        tournamentHolder.disciplineName.setText(mDiscipline.getmName());
+
+        Format formatter = new SimpleDateFormat("dd.MM.yyyy");
+        String date = formatter.format(featuredTournament.getmDateStart());
+        tournamentHolder.date.setText(date);
+
+        tournamentHolder.tournamentName.setText(featuredTournament.getmName());
+        if(featuredTournament.getmLocation().equals("null")){
             tournamentHolder.location.setText("Undefined Location");
+        }else{
+            tournamentHolder.location.setText(featuredTournament.getmLocation());
         }
         return _convertView;
     }

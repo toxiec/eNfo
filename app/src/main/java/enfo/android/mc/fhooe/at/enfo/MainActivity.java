@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDisciplineListView = (ListView) findViewById(R.id.lv_discipline);
         mDisciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
-        getDisciplineJSON();
+        getDisciplines();
         mDisciplineListView.setAdapter(mDisciplineAdapter);
         mDisciplineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getDisciplineJSON(){
+    private void getDisciplines(){
         new JSONTask().execute(mDisciplesURL);
     }
 
-    public void parseDisciplineJSON(){
+    private void parseDisciplineJSON(){
         String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends"};
         if(mJSONResult == null){
             Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     
-    public class JSONTask extends AsyncTask<String, String, String>{
+    private class JSONTask extends AsyncTask<String, String, String>{
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
