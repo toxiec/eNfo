@@ -10,7 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +21,16 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
+import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
 
 public class DisciplineActivity extends AppCompatActivity {
 
     private static final String TAG = "DisciplineActivity";
-
     private static final String DISCIPLINE_KEY = "discipline_key";
+    //private static final String DISCIPLINE_KEY = "discipline_key";
     /** Discipline which was selected from MainActivity ListView*/
     Discipline mDiscipline;
-
+    ImageView disciplineImage;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -47,25 +51,63 @@ public class DisciplineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discipline);
 
-        Bundle bundle = getIntent().getExtras();
-        //Intent i = getIntent();
-        //mDiscipline = (Discipline) i.getSerializableExtra("discipline");
+        if(NetworkCheck.isNetworkAvailable(this)){
+            Bundle bundle = getIntent().getExtras();
 
-        //CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.CTL_discipline);
-        //collapsingToolbarLayout.setTitle(mDiscipline.getmName());
-        //ImageView disciplineImage = (ImageView) findViewById(R.id.app_bar_image);
-        //disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
+            if(bundle!=null){
+                if(bundle.containsKey(DISCIPLINE_KEY)){
+                    mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
+                    //Log.i(TAG, mDiscipline.getmFullname());
+                }
+            }
+            //CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.CTL_discipline);
+            //collapsingToolbarLayout.setTitle(mDiscipline.getmName());
+            disciplineImage = (ImageView) findViewById(R.id.app_bar_image);
+            /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);*/
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            setUpViewPager(mViewPager, bundle);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        setUpViewPager(mViewPager, bundle);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabL_discipline);
-        tabLayout.setupWithViewPager(mViewPager);
-
-
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabL_discipline);
+            tabLayout.setupWithViewPager(mViewPager);
+            setUpImageView();
+        }else{
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    private void setUpImageView(){
+        if(mDiscipline != null){
+            switch(mDiscipline.getmId()){
+                case "counterstrike_go":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
+                    break;
+                }
+                case "leagueoflegends":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_lol);
+                    break;
+                }
+                case "dota2":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_dota2);
+                    break;
+                }
+                case "hearthstone":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_hearthstone);
+                    break;
+                }
+                case "starcraft2_lotv":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_sc2);
+                    break;
+                }
+
+                default:{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
+                    break;
+                }
+            }
+        }
+    }
     /**
      * Create SectionsPagerAdapter and add Fragments to it
      * @param _viewPager
@@ -77,7 +119,9 @@ public class DisciplineActivity extends AppCompatActivity {
         featuredTournamentFragment.setArguments(bundle);
         mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Featured");
 
-
+        RunningFragment runningTournaments = new RunningFragment();
+        runningTournaments.setArguments(bundle);
+        mSectionsPagerAdapter.addFragment(runningTournaments, "Running");
         //mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Public");
         //mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Finished");
         _viewPager.setAdapter(mSectionsPagerAdapter);

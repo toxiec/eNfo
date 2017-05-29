@@ -1,7 +1,10 @@
 package enfo.android.mc.fhooe.at.enfo;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,22 +43,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDisciplineListView = (ListView) findViewById(R.id.lv_discipline);
-        mDisciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
-        getDisciplines();
-        mDisciplineListView.setAdapter(mDisciplineAdapter);
-        mDisciplineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> _adapter, View _view, int _position, long _id) {
-                Discipline discipline = (Discipline) _adapter.getItemAtPosition(_position);
-                System.out.println(discipline.getmFullname()+" has been selected");
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DISCIPLINE_KEY, discipline);
-                Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
-                i.putExtras(bundle);
-                startActivity(i);
-            }
-        });
+        if(NetworkCheck.isNetworkAvailable(this)){
+            mDisciplineListView = (ListView) findViewById(R.id.lv_discipline);
+            mDisciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
+            getDisciplines();
+            mDisciplineListView.setAdapter(mDisciplineAdapter);
+            mDisciplineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> _adapter, View _view, int _position, long _id) {
+                    Discipline discipline = (Discipline) _adapter.getItemAtPosition(_position);
+                    System.out.println(discipline.getmFullname()+" has been selected");
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(DISCIPLINE_KEY, discipline);
+                    Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                }
+            });
+        }else{
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void getDisciplines(){
@@ -63,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parseDisciplineJSON(){
-        String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends"};
+        String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends","starcraft2_lotv"};
         if(mJSONResult == null){
             Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
         }else{

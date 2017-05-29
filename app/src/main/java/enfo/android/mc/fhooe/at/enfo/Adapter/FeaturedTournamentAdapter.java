@@ -77,15 +77,19 @@ public class FeaturedTournamentAdapter extends ArrayAdapter {
                 break;
             }
             case "dota2" : {
-                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
+                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_dota2);
                 break;
             }
             case "hearthstone" : {
-                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
+                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_hs);
                 break;
             }
             case "leagueoflegends" : {
-                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
+                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_lol);
+                break;
+            }
+            case "starcraft2_lotv":{
+                tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_sc2_lotv);
                 break;
             }
         }

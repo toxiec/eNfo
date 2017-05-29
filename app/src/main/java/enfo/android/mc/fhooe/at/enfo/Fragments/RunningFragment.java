@@ -1,8 +1,10 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -32,26 +34,24 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-
-public class FeaturedTournamentFragment extends Fragment {
+public class RunningFragment extends Fragment {
 
     private static final String TAG = "FTF";
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
     private final String API_KEY_HTTP_HEADER = "X-Api-Key";
-    private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1";
+    private final String mRunningTournamentsURL = "https://api.toornament.com/v1/tournaments?";
     private String mJSONResult;
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
     private Discipline mDiscipline;
-    private ListView mFeaturedMatchesListView;
+    private ListView mRunningTournamentsListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FeaturedTournamentAdapter mFeaturedTournamentAdapter;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_featured_tournament, container, false);
+        View view = inflater.inflate(R.layout.fragment_running_tournaments, container, false);
 
         Bundle bundle=getArguments();
         if(bundle!=null){
@@ -62,23 +62,23 @@ public class FeaturedTournamentFragment extends Fragment {
         }
 
         //Log.i(TAG, mDiscipline.getmId());
-        mFeaturedMatchesListView = (ListView) view.findViewById(R.id.lv_featuredMatches);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mRunningTournamentsListView = (ListView) view.findViewById(R.id.lv_runningTournaments);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_running_tournaments);
 
         mFeaturedTournamentAdapter = new FeaturedTournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
-        getFeaturedTournaments();
-        mFeaturedMatchesListView.setAdapter(mFeaturedTournamentAdapter);
+        getRunningTournaments();
+        mRunningTournamentsListView.setAdapter(mFeaturedTournamentAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getFeaturedTournaments();
+                getRunningTournaments();
             }
         });
         return view;
     }
 
-    private void getFeaturedTournaments(){
-        new JSONTask().execute(mFeaturedTournamentsURL);
+    private void getRunningTournaments(){
+        new JSONTask().execute(mRunningTournamentsURL);
     }
 
     private class JSONTask extends AsyncTask<String, String, String> {
@@ -96,7 +96,9 @@ public class FeaturedTournamentFragment extends Fragment {
                 StringBuilder urlbuilder = new StringBuilder();
                 urlbuilder.append(params[0]);
                 //get Tournaments of specified Discipline
+                //urlbuilder.append("featured=1");
                 urlbuilder.append("&discipline="+mDiscipline.getmId());
+                urlbuilder.append(("&status=running"));
                 URL url = new URL(urlbuilder.toString());
                 connection = (HttpURLConnection) url.openConnection();
                 connection.addRequestProperty(API_KEY_HTTP_HEADER ,API_KEY);
@@ -136,13 +138,13 @@ public class FeaturedTournamentFragment extends Fragment {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            parseFeaturedTnmt();
+            parseRunningTnmt();
         }
     }
 
-    private void parseFeaturedTnmt() {
+    private void parseRunningTnmt() {
         if(mJSONResult == null){
-            Toast.makeText(getContext(), "No Featured Tournaments Found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No Running Tournaments Found", Toast.LENGTH_SHORT).show();
         }else{
             try {
                 JSONArray jsonarray = new JSONArray(mJSONResult);
@@ -167,10 +169,9 @@ public class FeaturedTournamentFragment extends Fragment {
                     String country = jsonobject.getString("country");
                     int size = jsonobject.getInt("size");
 
-
                     FeaturedTournament tournament = new FeaturedTournament(id, discipline, name,fullname,status,date_start,date_end,
-                                online,publicT,location,country,size);
-                        //mDisciplineList.add(discipline);
+                            online,publicT,location,country,size);
+                    //mDisciplineList.add(discipline);
 
                     mFeaturedTournamentAdapter.add(tournament);
                     mFeaturedTournamentAdapter.notifyDataSetChanged();
@@ -183,4 +184,5 @@ public class FeaturedTournamentFragment extends Fragment {
             }
         }
     }
+
 }

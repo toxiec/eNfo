@@ -69,6 +69,9 @@ public class DiscipleAdapter extends ArrayAdapter {
                 disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_lol);
                 break;
             }
+            case "starcraft2_lotv" :{
+                disciplineHolder.disciplineLogo.setImageResource(R.drawable.image_discipline_sc2_lotv);
+            }
         }
         disciplineHolder.disciplineFullName.setText(discipline.getmFullname());
         return _convertView;
