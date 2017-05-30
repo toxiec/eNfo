@@ -17,33 +17,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
+import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-
-public class FeaturedTournamentAdapter extends ArrayAdapter {
-    List<FeaturedTournament> mTournamentList = new ArrayList<>();
+/**
+ *
+ */
+public class TournamentAdapter extends ArrayAdapter {
+    /**Contains the Tournaments which should be displayed in the ListView */
+    List<Tournament> mTournamentList = new ArrayList<>();
+    /**Discipline Object */
     Discipline mDiscipline;
-    public FeaturedTournamentAdapter(@NonNull Context context, @LayoutRes int resource, Discipline _discipline) {
+
+    /**
+     * Constructor
+     * @param context
+     * @param resource
+     * @param _discipline
+     */
+    public TournamentAdapter(@NonNull Context context, @LayoutRes int resource, Discipline _discipline) {
         super(context, resource);
         mDiscipline = _discipline;
     }
 
     /**
-     * Adds a FeaturedTournament to the List which will be displayed in the ListView
+     * Adds a Tournament to the List which will be displayed in the ListView
      * @param _tournament
      */
-    public void add(FeaturedTournament _tournament) {
+    public void add(Tournament _tournament) {
         super.add(_tournament);
         mTournamentList.add(_tournament);
     }
 
+    /**
+     * Get item from given position
+     * @param position
+     * @return Tournament Object
+     */
     @Nullable
     @Override
     public Object getItem(int position) {
         return mTournamentList.get(position);
     }
 
+    /**
+     * Get the Size of the Tournament List
+     * @return size
+     */
     @Override
     public int getCount() {
         return mTournamentList.size();
@@ -70,7 +90,7 @@ public class FeaturedTournamentAdapter extends ArrayAdapter {
         }
 
         //Set the Values for the List Element
-        FeaturedTournament featuredTournament = (FeaturedTournament) this.getItem(_position);
+        Tournament tournament = (Tournament) this.getItem(_position);
         switch(mDiscipline.getmId()){
             case "counterstrike_go" : {
                 tournamentHolder.disciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
@@ -95,19 +115,24 @@ public class FeaturedTournamentAdapter extends ArrayAdapter {
         }
         tournamentHolder.disciplineName.setText(mDiscipline.getmName());
 
+        //Convert the Date to dd.MM.yyyy
         Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-        String date = formatter.format(featuredTournament.getmDateStart());
+        String date = formatter.format(tournament.getmDateStart());
         tournamentHolder.date.setText(date);
 
-        tournamentHolder.tournamentName.setText(featuredTournament.getmName());
-        if(featuredTournament.getmLocation().equals("null")){
+        tournamentHolder.tournamentName.setText(tournament.getmName());
+        if(tournament.getmLocation().equals("null")){
             tournamentHolder.location.setText("Undefined Location");
         }else{
-            tournamentHolder.location.setText(featuredTournament.getmLocation());
+            tournamentHolder.location.setText(tournament.getmLocation());
         }
         return _convertView;
     }
 
+    /**
+     *Stores each of the component views inside the tag field of the Layout, so you can
+     *immediately access them without the need to look them up repeatedly.
+     */
     private static class ViewHolder{
         ImageView disciplineLogo;
         TextView disciplineName;

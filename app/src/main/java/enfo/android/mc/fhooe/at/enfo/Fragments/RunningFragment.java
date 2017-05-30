@@ -1,10 +1,8 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -29,9 +27,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.FeaturedTournamentAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
+import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 public class RunningFragment extends Fragment {
@@ -46,7 +44,7 @@ public class RunningFragment extends Fragment {
     private Discipline mDiscipline;
     private ListView mRunningTournamentsListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FeaturedTournamentAdapter mFeaturedTournamentAdapter;
+    private TournamentAdapter mTournamentAdapter;
 
     @Nullable
     @Override
@@ -65,9 +63,9 @@ public class RunningFragment extends Fragment {
         mRunningTournamentsListView = (ListView) view.findViewById(R.id.lv_runningTournaments);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_running_tournaments);
 
-        mFeaturedTournamentAdapter = new FeaturedTournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
+        mTournamentAdapter = new TournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
         getRunningTournaments();
-        mRunningTournamentsListView.setAdapter(mFeaturedTournamentAdapter);
+        mRunningTournamentsListView.setAdapter(mTournamentAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -169,12 +167,12 @@ public class RunningFragment extends Fragment {
                     String country = jsonobject.getString("country");
                     int size = jsonobject.getInt("size");
 
-                    FeaturedTournament tournament = new FeaturedTournament(id, discipline, name,fullname,status,date_start,date_end,
+                    Tournament tournament = new Tournament(id, discipline, name,fullname,status,date_start,date_end,
                             online,publicT,location,country,size);
                     //mDisciplineList.add(discipline);
 
-                    mFeaturedTournamentAdapter.add(tournament);
-                    mFeaturedTournamentAdapter.notifyDataSetChanged();
+                    mTournamentAdapter.add(tournament);
+                    mTournamentAdapter.notifyDataSetChanged();
                 }
 
             } catch (JSONException e) {

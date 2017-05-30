@@ -12,26 +12,26 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class DiscipleAdapter extends ArrayAdapter {
-    List<Discipline> mDiscipleList = new ArrayList<>();
+public class DisciplineAdapter extends ArrayAdapter {
+    List<Discipline> mDisciplineList = new ArrayList<>();
 
-    public DiscipleAdapter(Context context, int resource) {
+    public DisciplineAdapter(Context context, int resource) {
         super(context, resource);
     }
 
     public void add(Discipline object) {
         super.add(object);
-        mDiscipleList.add(object);
+        mDisciplineList.add(object);
     }
 
     @Override
     public int getCount() {
-        return mDiscipleList.size();
+        return mDisciplineList.size();
     }
 
     @Override
     public Object getItem(int _position) {
-        return mDiscipleList.get(_position);
+        return mDisciplineList.get(_position);
     }
 
     @Override

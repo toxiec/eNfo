@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Object which contains information about the FeaturedMatches of various eSport Tournaments
  */
-public class FeaturedTournament implements Serializable{
+public class Tournament implements Serializable{
     /**An hexadecimal unique identifier for this tournament.*/
     private String mID;
 
@@ -46,9 +46,9 @@ public class FeaturedTournament implements Serializable{
     private int mSize;
 
 
-    public FeaturedTournament(String _ID, String _discipline, String _name, String _fullName,
-                              String _status, Date _dateStart, Date _dateEnd, boolean _online,
-                              boolean _public, String _location, String _country, int _size){
+    public Tournament(String _ID, String _discipline, String _name, String _fullName,
+                      String _status, Date _dateStart, Date _dateEnd, boolean _online,
+                      boolean _public, String _location, String _country, int _size){
 
         mID = _ID;
         mDiscipline = _discipline;

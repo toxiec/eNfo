@@ -1,10 +1,7 @@
-package enfo.android.mc.fhooe.at.enfo;
+package enfo.android.mc.fhooe.at.enfo.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,16 +23,25 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.DiscipleAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.NetworkCheck;
+import enfo.android.mc.fhooe.at.enfo.R;
 
 public class MainActivity extends AppCompatActivity {
+    /**Key to get Discipline Data from the Bundle */
     private static final String DISCIPLINE_KEY = "discipline_key";
+    /**Key will be used to authenticate your application on the Toornament API*/
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
+    /**adds the API KEY to the HTTP Header to authenticate the App*/
     private final String API_KEY_HTTP_HEADER = "X-Api-Key";
+    /**URL to receive all disciplines available in the API*/
     private final String mDisciplesURL = "https://api.toornament.com/v1/disciplines";
+    /**Contains the Discipline JSON Result*/
     private String mJSONResult;
-    private DiscipleAdapter mDisciplineAdapter;
+    /**ListAdapter for the mDisciplineListView*/
+    private DisciplineAdapter mDisciplineAdapter;
+    /**List which displays the fetched Disciplines*/
     private ListView mDisciplineListView;
 
     @Override
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(NetworkCheck.isNetworkAvailable(this)){
             mDisciplineListView = (ListView) findViewById(R.id.lv_discipline);
-            mDisciplineAdapter = new DiscipleAdapter(this, R.layout.disciple_row_layout);
+            mDisciplineAdapter = new DisciplineAdapter(this, R.layout.disciple_row_layout);
             getDisciplines();
             mDisciplineListView.setAdapter(mDisciplineAdapter);
             mDisciplineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,42 +69,18 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
-
     }
 
+    /**
+     * Fetch Discipline from the API
+     */
     private void getDisciplines(){
         new JSONTask().execute(mDisciplesURL);
     }
 
-    private void parseDisciplineJSON(){
-        String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends","starcraft2_lotv"};
-        if(mJSONResult == null){
-            Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
-        }else{
-            try {
-                JSONArray jsonarray = new JSONArray(mJSONResult);
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject jsonobject = jsonarray.getJSONObject(i);
-                    String id = jsonobject.getString("id");
-                    String name = jsonobject.getString("name");
-                    String shortname = jsonobject.getString("shortname");
-                    String fullname = jsonobject.getString("fullname");
-                    String copyrights = jsonobject.getString("copyrights");
-
-                    if(Arrays.asList(games).contains(id)){
-                        Discipline discipline = new Discipline(id,name,shortname,fullname,copyrights);
-                        //mDisciplineList.add(discipline);
-
-                        mDisciplineAdapter.add(discipline);
-                        mDisciplineAdapter.notifyDataSetChanged();
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
+    /**
+     *Async Task to Receive Discipline JSON Data
+     */
     private class JSONTask extends AsyncTask<String, String, String>{
         HttpURLConnection connection = null;
         BufferedReader reader = null;
@@ -154,6 +136,39 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
             parseDisciplineJSON();
+        }
+    }
+
+    /**
+     * Creates Tournament Objects from the received Discipline JSON and adds it to the Listview.
+     */
+    private void parseDisciplineJSON(){
+        //Only Adds Disciplines which contain the ID from this Array (Filtering)
+        String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends","starcraft2_lotv"};
+        if(mJSONResult == null){
+            Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
+        }else{
+            try {
+                JSONArray jsonarray = new JSONArray(mJSONResult);
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+                    String id = jsonobject.getString("id");
+                    String name = jsonobject.getString("name");
+                    String shortname = jsonobject.getString("shortname");
+                    String fullname = jsonobject.getString("fullname");
+                    String copyrights = jsonobject.getString("copyrights");
+
+                    if(Arrays.asList(games).contains(id)){
+                        Discipline discipline = new Discipline(id,name,shortname,fullname,copyrights);
+                        //mDisciplineList.add(discipline);
+
+                        mDisciplineAdapter.add(discipline);
+                        mDisciplineAdapter.notifyDataSetChanged();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

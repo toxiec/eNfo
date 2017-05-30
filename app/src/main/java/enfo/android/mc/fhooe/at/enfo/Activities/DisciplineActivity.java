@@ -1,17 +1,12 @@
-package enfo.android.mc.fhooe.at.enfo;
+package enfo.android.mc.fhooe.at.enfo.Activities;
 
-import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,31 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
+import enfo.android.mc.fhooe.at.enfo.NetworkCheck;
+import enfo.android.mc.fhooe.at.enfo.R;
 
+/**
+ * Class which contains a Tab Layout to Display Featured, Running and Completed Tournaments for
+ * a specific Discipline
+ */
 public class DisciplineActivity extends AppCompatActivity {
 
     private static final String TAG = "DisciplineActivity";
+
+    /**Key to get Discipline Data from the Bundle */
     private static final String DISCIPLINE_KEY = "discipline_key";
-    //private static final String DISCIPLINE_KEY = "discipline_key";
     /** Discipline which was selected from MainActivity ListView*/
     Discipline mDiscipline;
+    /**App Bar Image*/
     ImageView disciplineImage;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    /**Adapter which returns Fragment for Tabs*/
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    /**The {@link ViewPager} that will host the section contents.*/
     private ViewPager mViewPager;
 
     @Override
@@ -51,6 +44,7 @@ public class DisciplineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discipline);
 
+        //Check if Network Connection is available
         if(NetworkCheck.isNetworkAvailable(this)){
             Bundle bundle = getIntent().getExtras();
 
@@ -77,6 +71,9 @@ public class DisciplineActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets the Image view in the Toolbar to the right Picture, depending on which game was selected
+     */
     private void setUpImageView(){
         if(mDiscipline != null){
             switch(mDiscipline.getmId()){
@@ -108,19 +105,21 @@ public class DisciplineActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Create SectionsPagerAdapter and add Fragments to it
      * @param _viewPager
+     * @param _bundle which contains a Discipline Object from the MainActivity
      */
-    private void setUpViewPager(ViewPager _viewPager, Bundle bundle){
+    private void setUpViewPager(ViewPager _viewPager, Bundle _bundle){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         FeaturedTournamentFragment featuredTournamentFragment = new FeaturedTournamentFragment();
-        featuredTournamentFragment.setArguments(bundle);
+        featuredTournamentFragment.setArguments(_bundle);
         mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Featured");
 
         RunningFragment runningTournaments = new RunningFragment();
-        runningTournaments.setArguments(bundle);
+        runningTournaments.setArguments(_bundle);
         mSectionsPagerAdapter.addFragment(runningTournaments, "Running");
         //mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Public");
         //mSectionsPagerAdapter.addFragment(featuredTournamentFragment, "Finished");
@@ -140,44 +139,42 @@ public class DisciplineActivity extends AppCompatActivity {
             super(fm);
         }
 
+        /**
+         * Get Fragment from position
+         * @param position
+         * @return Fragment
+         */
         @Override
         public Fragment getItem(int position) {
-            /*switch (position){
-                case 0:
-                    return new FeaturedTournamentFragment();
-                case 1:
-                    return new FeaturedTournamentFragment();
-                case 2:
-                    return new FeaturedTournamentFragment();
-                default:
-                    return null;
-            }*/
             return mFragmentList.get(position);
         }
 
+        /**
+         * Get number of Fragments in the List
+         * @return
+         */
         @Override
         public int getCount() {
-            //return 3;
             return mFragmentList.size();
         }
 
+        /**
+         * Add a Fragment to the List
+         * @param _fragment which should be added
+         * @param _title which will be displayed on Tab bar
+         */
         public void addFragment(Fragment _fragment, String _title){
             mFragmentList.add(_fragment);
             mFragmentTitleList.add(_title);
         }
 
+        /**
+         * Get the Title from Fragment
+         * @param position
+         * @return Title
+         */
         @Override
         public CharSequence getPageTitle(int position) {
-            /*switch (position){
-                case 0:
-                    return "Featured";
-                case 1:
-                    return "Public";
-                case 2:
-                    return "Ended";
-                default:
-                    return null;
-            }*/
             return mFragmentTitleList.get(position);
         }
     }

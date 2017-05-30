@@ -27,9 +27,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.FeaturedTournamentAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Entities.FeaturedTournament;
+import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 
@@ -45,7 +45,7 @@ public class FeaturedTournamentFragment extends Fragment {
     private Discipline mDiscipline;
     private ListView mFeaturedMatchesListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FeaturedTournamentAdapter mFeaturedTournamentAdapter;
+    private TournamentAdapter mTournamentAdapter;
 
 
     @Nullable
@@ -65,9 +65,9 @@ public class FeaturedTournamentFragment extends Fragment {
         mFeaturedMatchesListView = (ListView) view.findViewById(R.id.lv_featuredMatches);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
-        mFeaturedTournamentAdapter = new FeaturedTournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
+        mTournamentAdapter = new TournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
         getFeaturedTournaments();
-        mFeaturedMatchesListView.setAdapter(mFeaturedTournamentAdapter);
+        mFeaturedMatchesListView.setAdapter(mTournamentAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -168,12 +168,12 @@ public class FeaturedTournamentFragment extends Fragment {
                     int size = jsonobject.getInt("size");
 
 
-                    FeaturedTournament tournament = new FeaturedTournament(id, discipline, name,fullname,status,date_start,date_end,
+                    Tournament tournament = new Tournament(id, discipline, name,fullname,status,date_start,date_end,
                                 online,publicT,location,country,size);
                         //mDisciplineList.add(discipline);
 
-                    mFeaturedTournamentAdapter.add(tournament);
-                    mFeaturedTournamentAdapter.notifyDataSetChanged();
+                    mTournamentAdapter.add(tournament);
+                    mTournamentAdapter.notifyDataSetChanged();
                 }
 
             } catch (JSONException e) {
