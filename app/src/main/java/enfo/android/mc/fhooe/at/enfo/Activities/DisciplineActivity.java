@@ -1,5 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Activities;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,9 +38,10 @@ public class DisciplineActivity extends AppCompatActivity {
     ImageView disciplineImage;
     /**Adapter which returns Fragment for Tabs*/
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**The {@link ViewPager} that will host the section contents.*/
     private ViewPager mViewPager;
+    private Toolbar mToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +58,16 @@ public class DisciplineActivity extends AppCompatActivity {
                     //Log.i(TAG, mDiscipline.getmFullname());
                 }
             }
-            //CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.CTL_discipline);
-            //collapsingToolbarLayout.setTitle(mDiscipline.getmName());
+
+
             disciplineImage = (ImageView) findViewById(R.id.app_bar_image);
-            /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);*/
-            // Set up the ViewPager with the sections adapter.
             mViewPager = (ViewPager) findViewById(R.id.container);
             setUpViewPager(mViewPager, bundle);
-
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabL_discipline);
             tabLayout.setupWithViewPager(mViewPager);
+
+            //setupCollapsingToolbar();
+            //setupToolbar();
             setUpImageView();
         }else{
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -104,6 +107,17 @@ public class DisciplineActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void setupCollapsingToolbar() {
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
+        collapsingToolbar.setTitleEnabled(false);
+    }
+
+    private void setupToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(mDiscipline.getmName());
     }
 
     /**

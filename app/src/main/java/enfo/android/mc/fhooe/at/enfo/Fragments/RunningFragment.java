@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,9 +26,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
@@ -42,9 +45,10 @@ public class RunningFragment extends Fragment {
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
     private Discipline mDiscipline;
-    private ListView mRunningTournamentsListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private TournamentAdapter mTournamentAdapter;
+    private TournamentsAdapter mTournamentsAdapter;
+    private RecyclerView mRunningTournamentsRecycleView;
+    private List<Tournament> mRunningTournamentsList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -60,18 +64,20 @@ public class RunningFragment extends Fragment {
         }
 
         //Log.i(TAG, mDiscipline.getmId());
-        mRunningTournamentsListView = (ListView) view.findViewById(R.id.lv_runningTournaments);
+        //mRunningTournamentsListView = (ListView) view.findViewById(R.id.lv_runningTournaments);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_running_tournaments);
-
-        mTournamentAdapter = new TournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
-        getRunningTournaments();
-        mRunningTournamentsListView.setAdapter(mTournamentAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getRunningTournaments();
             }
         });
+        mRunningTournamentsRecycleView = (RecyclerView) view.findViewById(R.id.rv_runningTournaments);
+        getRunningTournaments();
+        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline, mRunningTournamentsList);
+        mRunningTournamentsRecycleView.setAdapter(mTournamentsAdapter);
+        mRunningTournamentsRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         return view;
     }
 
@@ -144,6 +150,7 @@ public class RunningFragment extends Fragment {
         if(mJSONResult == null){
             Toast.makeText(getContext(), "No Running Tournaments Found", Toast.LENGTH_SHORT).show();
         }else{
+            mRunningTournamentsList.clear();
             try {
                 JSONArray jsonarray = new JSONArray(mJSONResult);
                 for (int i = 0; i < jsonarray.length(); i++) {
@@ -170,10 +177,9 @@ public class RunningFragment extends Fragment {
                     Tournament tournament = new Tournament(id, discipline, name,fullname,status,date_start,date_end,
                             online,publicT,location,country,size);
                     //mDisciplineList.add(discipline);
-
-                    mTournamentAdapter.add(tournament);
-                    mTournamentAdapter.notifyDataSetChanged();
+                    mRunningTournamentsList.add(tournament);
                 }
+                mTournamentsAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();

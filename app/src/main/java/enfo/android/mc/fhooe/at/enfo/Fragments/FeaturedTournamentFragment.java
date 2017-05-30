@@ -3,13 +3,18 @@ package enfo.android.mc.fhooe.at.enfo.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,13 +30,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
-
 
 public class FeaturedTournamentFragment extends Fragment {
 
@@ -43,10 +49,11 @@ public class FeaturedTournamentFragment extends Fragment {
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
     private Discipline mDiscipline;
-    private ListView mFeaturedMatchesListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private TournamentAdapter mTournamentAdapter;
-
+    private List<Tournament> mTournamentList = new ArrayList<>();
+    private RecyclerView mFeaturedTournamentsRecyclerView;
+    private TournamentsAdapter mTournamentsAdapter;
+    private Toolbar mToolbar;
 
     @Nullable
     @Override
@@ -61,19 +68,19 @@ public class FeaturedTournamentFragment extends Fragment {
             }
         }
 
-        //Log.i(TAG, mDiscipline.getmId());
-        mFeaturedMatchesListView = (ListView) view.findViewById(R.id.lv_featuredMatches);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-
-        mTournamentAdapter = new TournamentAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline);
-        getFeaturedTournaments();
-        mFeaturedMatchesListView.setAdapter(mTournamentAdapter);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_featured_tournaments);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getFeaturedTournaments();
             }
         });
+
+        mFeaturedTournamentsRecyclerView = (RecyclerView) view.findViewById(R.id.rv_featuredMatches);
+        getFeaturedTournaments();
+        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline, mTournamentList);
+        mFeaturedTournamentsRecyclerView.setAdapter(mTournamentsAdapter);
+        mFeaturedTournamentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
     }
 
@@ -133,6 +140,7 @@ public class FeaturedTournamentFragment extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             mJSONResult = result;
+            //mTournamentsAdapter.notifyDataSetChanged();
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -144,6 +152,7 @@ public class FeaturedTournamentFragment extends Fragment {
         if(mJSONResult == null){
             Toast.makeText(getContext(), "No Featured Tournaments Found", Toast.LENGTH_SHORT).show();
         }else{
+            mTournamentList.clear();
             try {
                 JSONArray jsonarray = new JSONArray(mJSONResult);
                 for (int i = 0; i < jsonarray.length(); i++) {
@@ -172,9 +181,11 @@ public class FeaturedTournamentFragment extends Fragment {
                                 online,publicT,location,country,size);
                         //mDisciplineList.add(discipline);
 
-                    mTournamentAdapter.add(tournament);
-                    mTournamentAdapter.notifyDataSetChanged();
+                    //mTournamentAdapter.add(tournament);
+                    //mTournamentAdapter.notifyDataSetChanged();
+                    mTournamentList.add(tournament);
                 }
+                mTournamentsAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();
