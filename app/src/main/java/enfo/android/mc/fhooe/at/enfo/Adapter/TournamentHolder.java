@@ -60,9 +60,18 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
                 break;
             }
             case "starcraft2_lotv":{
-                mDisciplineLogo.setImageResource(R.drawable.image_discipline_sc2_lotv);
+                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_sc2_lotv);
                 break;
             }
+            case "overwatch":{
+                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_ow);
+                break;
+            }
+            case "heroesofthestorm":{
+                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_hots);
+                break;
+            }
+
         }
         mDisciplineName.setText(mDiscipline.getmName());
         //Convert the Date to dd.MM.yyyy

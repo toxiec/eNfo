@@ -100,6 +100,14 @@ public class DisciplineActivity extends AppCompatActivity {
                     disciplineImage.setImageResource(R.drawable.app_bar_image_sc2);
                     break;
                 }
+                case "overwatch":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_ow);
+                    break;
+                }
+                case "heroesofthestorm":{
+                    disciplineImage.setImageResource(R.drawable.app_bar_image_hots);
+                    break;
+                }
 
                 default:{
                     disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
