@@ -1,4 +1,4 @@
-package enfo.android.mc.fhooe.at.enfo.Adapter;
+package enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.DisciplineHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 
 public class DisciplineAdapter extends RecyclerView.Adapter<DisciplineHolder>{

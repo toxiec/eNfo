@@ -1,7 +1,9 @@
-package enfo.android.mc.fhooe.at.enfo;
+package enfo.android.mc.fhooe.at.enfo.Support;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import enfo.android.mc.fhooe.at.enfo.R;
 
 public class ItemClickSupport {
     private final RecyclerView mRecyclerView;

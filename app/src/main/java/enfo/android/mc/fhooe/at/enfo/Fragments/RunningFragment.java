@@ -1,6 +1,5 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,25 +16,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentsAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Support.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class RunningFragment extends Fragment {
+public class RunningFragment extends Fragment implements JSONTask.AsyncResponse {
 
     private static final String TAG = "FTF";
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
@@ -74,7 +67,7 @@ public class RunningFragment extends Fragment {
         });
         mRunningTournamentsRecycleView = (RecyclerView) view.findViewById(R.id.rv_runningTournaments);
         getRunningTournaments();
-        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline, mRunningTournamentsList);
+        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.item_featured_tournament_layout, mDiscipline, mRunningTournamentsList);
         mRunningTournamentsRecycleView.setAdapter(mTournamentsAdapter);
         mRunningTournamentsRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -82,10 +75,18 @@ public class RunningFragment extends Fragment {
     }
 
     private void getRunningTournaments(){
-        new JSONTask().execute(mRunningTournamentsURL);
+        StringBuilder urlbuilder = new StringBuilder();
+        urlbuilder.append(mRunningTournamentsURL);
+        //get Tournaments of specified Discipline
+        //urlbuilder.append("featured=1");
+        urlbuilder.append("&discipline="+mDiscipline.getmId());
+        urlbuilder.append(("&status=running"));
+        String url = urlbuilder.toString();
+        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        jsonTask.execute(url);
     }
 
-    private class JSONTask extends AsyncTask<String, String, String> {
+    /*private class JSONTask extends AsyncTask<String, String, String> {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
 
@@ -144,7 +145,7 @@ public class RunningFragment extends Fragment {
             }
             parseRunningTnmt();
         }
-    }
+    }*/
 
     private void parseRunningTnmt() {
         if(mJSONResult == null){
@@ -189,4 +190,9 @@ public class RunningFragment extends Fragment {
         }
     }
 
+    @Override
+    public void processFinish(String output) {
+        mJSONResult = output;
+        parseRunningTnmt();
+    }
 }

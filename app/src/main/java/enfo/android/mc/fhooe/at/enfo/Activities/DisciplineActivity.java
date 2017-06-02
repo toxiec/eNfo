@@ -1,6 +1,5 @@
 package enfo.android.mc.fhooe.at.enfo.Activities;
 
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +8,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
-import enfo.android.mc.fhooe.at.enfo.NetworkCheck;
+import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 /**
@@ -35,7 +35,7 @@ public class DisciplineActivity extends AppCompatActivity {
     /** Discipline which was selected from MainActivity ListView*/
     Discipline mDiscipline;
     /**App Bar Image*/
-    ImageView disciplineImage;
+    ImageView mDisciplineImage;
     /**Adapter which returns Fragment for Tabs*/
     private SectionsPagerAdapter mSectionsPagerAdapter;
     /**The {@link ViewPager} that will host the section contents.*/
@@ -60,7 +60,7 @@ public class DisciplineActivity extends AppCompatActivity {
             }
 
 
-            disciplineImage = (ImageView) findViewById(R.id.app_bar_image);
+            mDisciplineImage = (ImageView) findViewById(R.id.app_bar_image);
             mViewPager = (ViewPager) findViewById(R.id.container);
             setUpViewPager(mViewPager, bundle);
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabL_discipline);
@@ -81,51 +81,40 @@ public class DisciplineActivity extends AppCompatActivity {
         if(mDiscipline != null){
             switch(mDiscipline.getmId()){
                 case "counterstrike_go":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
+                    Glide.with(this).load(R.drawable.app_bar_image_csgo).into(mDisciplineImage);
                     break;
                 }
                 case "leagueoflegends":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_lol);
+                    Glide.with(this).load(R.drawable.app_bar_image_lol).into(mDisciplineImage);
                     break;
                 }
                 case "dota2":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_dota2);
+                    Glide.with(this).load(R.drawable.app_bar_image_dota2).into(mDisciplineImage);
                     break;
                 }
                 case "hearthstone":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_hearthstone);
+                    Glide.with(this).load(R.drawable.app_bar_image_hearthstone).into(mDisciplineImage);
                     break;
                 }
                 case "starcraft2_lotv":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_sc2);
+                    Glide.with(this).load(R.drawable.app_bar_image_sc2).into(mDisciplineImage);
                     break;
                 }
                 case "overwatch":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_ow);
+                    Glide.with(this).load(R.drawable.app_bar_image_ow).into(mDisciplineImage);
                     break;
                 }
                 case "heroesofthestorm":{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_hots);
+                    Glide.with(this).load(R.drawable.app_bar_image_hots).into(mDisciplineImage);
                     break;
                 }
 
                 default:{
-                    disciplineImage.setImageResource(R.drawable.app_bar_image_csgo);
+                    Glide.with(this).load(R.drawable.app_bar_image_csgo).into(mDisciplineImage);
                     break;
                 }
             }
         }
-    }
-
-    private void setupCollapsingToolbar() {
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
-        collapsingToolbar.setTitleEnabled(false);
-    }
-
-    private void setupToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(mDiscipline.getmName());
     }
 
     /**

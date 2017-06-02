@@ -1,4 +1,4 @@
-package enfo.android.mc.fhooe.at.enfo.Adapter;
+package enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -44,32 +46,35 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
 
         switch(mDiscipline.getmId()){
             case "counterstrike_go" : {
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_csgo);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_csgo).into(mDisciplineLogo);
                 break;
             }
             case "dota2" : {
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_dota2);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_dota2).into(mDisciplineLogo);
                 break;
             }
             case "hearthstone" : {
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_hs);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_hs).into(mDisciplineLogo);
                 break;
             }
             case "leagueoflegends" : {
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_lol);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_lol).into(mDisciplineLogo);
                 break;
             }
             case "starcraft2_lotv":{
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_sc2_lotv);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_sc2_lotv).into(mDisciplineLogo);
                 break;
             }
             case "overwatch":{
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_ow);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_ow).into(mDisciplineLogo);
                 break;
             }
             case "heroesofthestorm":{
-                mDisciplineLogo.setImageResource(R.drawable.image_featured_tournament_hots);
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_hots).into(mDisciplineLogo);
                 break;
+            }
+            default:{
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_dota2).into(mDisciplineLogo);
             }
 
         }

@@ -1,13 +1,9 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,25 +17,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.TournamentsAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Support.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class FeaturedTournamentFragment extends Fragment {
+public class FeaturedTournamentFragment extends Fragment implements JSONTask.AsyncResponse {
 
     private static final String TAG = "FTF";
     private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
@@ -78,16 +68,23 @@ public class FeaturedTournamentFragment extends Fragment {
 
         mFeaturedTournamentsRecyclerView = (RecyclerView) view.findViewById(R.id.rv_featuredMatches);
         getFeaturedTournaments();
-        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.featured_tournament_row_layout, mDiscipline, mTournamentList);
+        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.item_featured_tournament_layout, mDiscipline, mTournamentList);
         mFeaturedTournamentsRecyclerView.setAdapter(mTournamentsAdapter);
         mFeaturedTournamentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
     }
 
     private void getFeaturedTournaments(){
-        new JSONTask().execute(mFeaturedTournamentsURL);
+        StringBuilder urlbuilder = new StringBuilder();
+        urlbuilder.append(mFeaturedTournamentsURL);
+        //get Tournaments of specified Discipline
+        urlbuilder.append("&discipline="+mDiscipline.getmId());
+        String url = urlbuilder.toString();
+        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        jsonTask.execute(url);
     }
 
+    /*
     private class JSONTask extends AsyncTask<String, String, String> {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
@@ -146,7 +143,7 @@ public class FeaturedTournamentFragment extends Fragment {
             }
             parseFeaturedTnmt();
         }
-    }
+    }*/
 
     private void parseFeaturedTnmt() {
         if(mJSONResult == null){
@@ -193,5 +190,11 @@ public class FeaturedTournamentFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void processFinish(String output) {
+        mJSONResult = output;
+        parseFeaturedTnmt();
     }
 }

@@ -1,4 +1,4 @@
-package enfo.android.mc.fhooe.at.enfo;
+package enfo.android.mc.fhooe.at.enfo.Support;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -1,8 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,23 +15,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.DisciplineAdapter;
+import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.NetworkCheck;
+import enfo.android.mc.fhooe.at.enfo.Support.JSONTask;
+import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class MainActivity extends AppCompatActivity implements DisciplineAdapter.ClickListener{
+public class MainActivity extends AppCompatActivity implements DisciplineAdapter.ClickListener, JSONTask.AsyncResponse{
     private static final String TAG = "MainActivity";
     /**Key to get Discipline Data from the Bundle */
     private static final String DISCIPLINE_KEY = "discipline_key";
@@ -57,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_new);
+        setContentView(R.layout.activity_main);
 
         if(NetworkCheck.isNetworkAvailable(this)){
             mDisciplineRecycleView = (RecyclerView) findViewById(R.id.rv_discipline);
             getDisciplines();
-            mDisciplineAdapter = new DisciplineAdapter(this, R.layout.disciple_card, mDisciplineList);
+            mDisciplineAdapter = new DisciplineAdapter(this, R.layout.item_disciple_layout, mDisciplineList);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
             mDisciplineRecycleView.setLayoutManager(mLayoutManager);
             mDisciplineRecycleView.setItemAnimator(new DefaultItemAnimator());
@@ -77,8 +69,11 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
     /**
      * Fetch Discipline from the API
      */
-    private void getDisciplines(){
-        new JSONTask().execute(mDisciplesURL);
+    private void getDisciplines() {
+        JSONTask jsonTask = new JSONTask(this, null, this);
+        jsonTask.execute(mDisciplesURL);
+        //parseDisciplineJSON();
+        //new JSONTask().execute(mDisciplesURL);
     }
 
     /**
@@ -98,10 +93,11 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         startActivity(i);
     }
 
+
     /**
      *Async Task to Receive Discipline JSON Data
      */
-    private class JSONTask extends AsyncTask<String, String, String>{
+    /*private class JSONTask extends AsyncTask<String, String, String>{
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
@@ -157,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
             }
             parseDisciplineJSON();
         }
-    }
+    } */
 
     /**
      * Creates Tournament Objects from the received Discipline JSON and adds it to the Listview.
@@ -193,5 +189,11 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void processFinish(String output) {
+        mJSONResult = output;
+        parseDisciplineJSON();
     }
 }
