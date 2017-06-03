@@ -1,6 +1,7 @@
 package enfo.android.mc.fhooe.at.enfo.Activities;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Support.JSONTask;
+import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
     private DisciplineAdapter mDisciplineAdapter;
     /**List which contains the fetched Disciples*/
     private List<Discipline> mDisciplineList = new ArrayList<>();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         setContentView(R.layout.activity_main);
 
         if(NetworkCheck.isNetworkAvailable(this)){
+            mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_activity_main);
             mDisciplineRecycleView = (RecyclerView) findViewById(R.id.rv_discipline);
             getDisciplines();
             mDisciplineAdapter = new DisciplineAdapter(this, R.layout.item_disciple_layout, mDisciplineList);
@@ -61,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
             mDisciplineRecycleView.setAdapter(mDisciplineAdapter);
             mDisciplineRecycleView.setHasFixedSize(true);
             mDisciplineAdapter.setClickListener(this);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    getDisciplines();
+                }
+            });
         }else{
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
@@ -70,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
      * Fetch Discipline from the API
      */
     private void getDisciplines() {
-        JSONTask jsonTask = new JSONTask(this, null, this);
+        JSONTask jsonTask = new JSONTask(this, mSwipeRefreshLayout, this);
         jsonTask.execute(mDisciplesURL);
         //parseDisciplineJSON();
         //new JSONTask().execute(mDisciplesURL);
@@ -93,68 +102,6 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         startActivity(i);
     }
 
-
-    /**
-     *Async Task to Receive Discipline JSON Data
-     */
-    /*private class JSONTask extends AsyncTask<String, String, String>{
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog.setMessage("Please Wait");
-            dialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                URL url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.addRequestProperty(API_KEY_HTTP_HEADER ,API_KEY);
-                connection.connect();
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuffer result = new StringBuffer();
-                String line = "";
-
-                while((line = reader.readLine())!=null){
-                    result.append(line+"\n");
-                }
-                return result.toString();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
-                if(connection != null){
-                    connection.disconnect();
-                }if(reader != null){
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            mJSONResult = result;
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-            parseDisciplineJSON();
-        }
-    } */
-
     /**
      * Creates Tournament Objects from the received Discipline JSON and adds it to the Listview.
      */
@@ -164,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         if(mJSONResult == null){
             Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
         }else{
+            mDisciplineList.clear();
             try {
                 JSONArray jsonarray = new JSONArray(mJSONResult);
                 for (int i = 0; i < jsonarray.length(); i++) {
@@ -181,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
                         //mDisciplineAdapter.add(discipline);
                         //mDisciplineAdapter.notifyDataSetChanged();
                         mDisciplineList.add(discipline);
-                        ;
                     }
                 }
                 mDisciplineAdapter.notifyDataSetChanged();

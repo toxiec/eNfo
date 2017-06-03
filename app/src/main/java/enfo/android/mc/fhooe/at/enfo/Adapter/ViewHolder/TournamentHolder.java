@@ -94,7 +94,7 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
     @Override
     public void onClick(View v) {
         if (mTournament != null) {
-            Toast.makeText(mContext, "Clicked on " + mTournament.getmName(), Toast.LENGTH_SHORT ).show();
+            //Toast.makeText(mContext, "Clicked on " + mTournament.getmName(), Toast.LENGTH_SHORT ).show();
         }
     }
 }

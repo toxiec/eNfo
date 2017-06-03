@@ -1,5 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,27 +24,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import enfo.android.mc.fhooe.at.enfo.Activities.TournamentActivity;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
-import enfo.android.mc.fhooe.at.enfo.Support.JSONTask;
+import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
+import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 public class FeaturedTournamentFragment extends Fragment implements JSONTask.AsyncResponse {
 
     private static final String TAG = "FTF";
-    private final String API_KEY = "JK5nCbHtb9yEGHDYNCdYgCvHGXRD7r-3HwVOJDjSMME";
-    private final String API_KEY_HTTP_HEADER = "X-Api-Key";
     private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1";
     private String mJSONResult;
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
+    private static final String TOURNAMENT_KEY = "tournament_key";
     private Discipline mDiscipline;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Tournament> mTournamentList = new ArrayList<>();
     private RecyclerView mFeaturedTournamentsRecyclerView;
     private TournamentsAdapter mTournamentsAdapter;
-    private Toolbar mToolbar;
 
     @Nullable
     @Override
@@ -71,6 +72,19 @@ public class FeaturedTournamentFragment extends Fragment implements JSONTask.Asy
         mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.item_featured_tournament_layout, mDiscipline, mTournamentList);
         mFeaturedTournamentsRecyclerView.setAdapter(mTournamentsAdapter);
         mFeaturedTournamentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ItemClickSupport.addTo(mFeaturedTournamentsRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Tournament tournament = mTournamentList.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(TOURNAMENT_KEY, tournament);
+                bundle.putSerializable(DISCIPLINE_KEY, mDiscipline);
+                Intent i = new Intent(getActivity(), TournamentActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
+                //Toast.makeText(getActivity(), "Clicked on " + mTournamentList.get(position).getmName(), Toast.LENGTH_SHORT ).show();
+            }
+        });
         return view;
     }
 
@@ -83,67 +97,6 @@ public class FeaturedTournamentFragment extends Fragment implements JSONTask.Asy
         JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
         jsonTask.execute(url);
     }
-
-    /*
-    private class JSONTask extends AsyncTask<String, String, String> {
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                StringBuilder urlbuilder = new StringBuilder();
-                urlbuilder.append(params[0]);
-                //get Tournaments of specified Discipline
-                urlbuilder.append("&discipline="+mDiscipline.getmId());
-                URL url = new URL(urlbuilder.toString());
-                connection = (HttpURLConnection) url.openConnection();
-                connection.addRequestProperty(API_KEY_HTTP_HEADER ,API_KEY);
-                connection.connect();
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuffer result = new StringBuffer();
-                String line = "";
-
-                while((line = reader.readLine())!=null){
-                    result.append(line+"\n");
-                }
-                return result.toString();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
-                if(connection != null){
-                    connection.disconnect();
-                }if(reader != null){
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            mJSONResult = result;
-            //mTournamentsAdapter.notifyDataSetChanged();
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-            parseFeaturedTnmt();
-        }
-    }*/
 
     private void parseFeaturedTnmt() {
         if(mJSONResult == null){

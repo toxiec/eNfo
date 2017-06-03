@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Object which contains information about the FeaturedMatches of various eSport Tournaments
+ * Object which contains information about the Tournaments of various eSport Tournaments
  */
 public class Tournament implements Serializable{
     /**An hexadecimal unique identifier for this tournament.*/
