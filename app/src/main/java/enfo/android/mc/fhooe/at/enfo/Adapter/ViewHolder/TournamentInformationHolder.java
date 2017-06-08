@@ -33,10 +33,26 @@ public class TournamentInformationHolder extends ViewHolder {
 
     public void bindTournament(TournamentInformationItem _item, Discipline _discipline) {
         if(_item!=null) {
-            if (_item.getmHeadLine().equals("Discipline")) {
-                mInformationText.setText(_discipline.getmFullname());
-            } else {
-                mInformationText.setText(_item.getmText());
+            if(_item.getmText().equals("null")){
+                mInformationText.setText("");
+            }else{
+                if (_item.getmHeadLine().equals("Discipline")) {
+                    mInformationText.setText(_discipline.getmFullname());
+                } else {
+                    mInformationText.setText(_item.getmText());
+                }
+                if(_item.getmHeadLine().equals("Start Date") || _item.getmHeadLine().equals("End Date")){
+                    String dateStart = _item.getmText();
+                    SimpleDateFormat fromDate = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                    SimpleDateFormat toDate = new SimpleDateFormat("dd.MM.yyyy");
+                    try {
+                        String reformattedDate = toDate.format(fromDate.parse(dateStart));
+                        mInformationText.setText(reformattedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
             mInformationHeader.setText(_item.getmHeadLine());
         }else{

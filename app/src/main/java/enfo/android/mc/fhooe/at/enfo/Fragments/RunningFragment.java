@@ -120,7 +120,8 @@ public class RunningFragment extends Fragment implements JSONTask.AsyncResponse 
                     Date date_start = sdf.parse(dateStart);
 
                     String dateEnd = jsonobject.getString("date_start");
-                    Date date_end = sdf.parse(dateEnd);
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date_end = sdf2.parse(dateEnd);
 
                     boolean online = jsonobject.getBoolean("online");
                     boolean publicT = jsonobject.getBoolean("public");

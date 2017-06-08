@@ -1,9 +1,12 @@
 package enfo.android.mc.fhooe.at.enfo.Activities;
 
+import android.app.ActionBar;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.SectionsPagerAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
+import enfo.android.mc.fhooe.at.enfo.Fragments.ParticipantFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.TournamentInformationFragment;
 import enfo.android.mc.fhooe.at.enfo.R;
@@ -49,6 +53,7 @@ public class TournamentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament);
+
         if (NetworkCheck.isNetworkAvailable(this)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
@@ -60,6 +65,10 @@ public class TournamentActivity extends AppCompatActivity {
                     mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
                 }
             }
+
+            /*Toolbar mActionToolbar = (Toolbar) findViewById(R.id.toolbar_tournament_activity);
+            setSupportActionBar(mActionToolbar);
+            getSupportActionBar().setTitle(mTournament.getmName());*/
 
             mDisciplineImage = (ImageView) findViewById(R.id.app_bar_image_tournament_activity);
             mViewPager = (ViewPager) findViewById(R.id.container_tournament_activity);
@@ -130,6 +139,10 @@ public class TournamentActivity extends AppCompatActivity {
         TournamentInformationFragment tournamentInformationFragment = new TournamentInformationFragment();
         tournamentInformationFragment.setArguments(_bundle);
         mSectionsPagerAdapter.addFragment(tournamentInformationFragment, "Info");
+
+        ParticipantFragment participantFragment = new ParticipantFragment();
+        participantFragment.setArguments(_bundle);
+        mSectionsPagerAdapter.addFragment(participantFragment, "Participants");
 
         _viewPager.setAdapter(mSectionsPagerAdapter);
     }

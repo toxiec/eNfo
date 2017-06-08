@@ -103,4 +103,6 @@ public class TournamentDetail extends Tournament {
         "Preis : "+getmPrize()+"\n"+"Rules : "+getmRules()+"\n");
         return buffer.toString();
     }
+
+
 }

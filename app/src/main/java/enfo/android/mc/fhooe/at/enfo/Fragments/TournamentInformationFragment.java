@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -64,7 +65,6 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
                     mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
                 }
             }
-
             mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_tournament_information);
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -110,11 +110,12 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
                 String name = jsonObject.getString("name");
                 String fullname = jsonObject.getString("full_name");
                 String status = jsonObject.getString("full_name");
+
                 String dateStart = jsonObject.getString("date_start");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date_start = sdf.parse(dateStart);
 
-                String dateEnd = jsonObject.getString("date_start");
+                String dateEnd = jsonObject.getString("date_end");
                 Date date_end = sdf.parse(dateEnd);
 
                 String timeZone = jsonObject.getString("timezone");
@@ -131,9 +132,15 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
                 String description = jsonObject.getString("description");
                 String rules = jsonObject.getString("rules");
                 String prize = jsonObject.getString("prize");
-                int teamSizeMin = jsonObject.getInt("team_min_size");
-                int teamSizeMax = jsonObject.getInt("team_max_size");
-
+                int teamSizeMin;
+                int teamSizeMax;
+                if(participantDetail.equals("team")){
+                    teamSizeMin = jsonObject.getInt("team_min_size");
+                    teamSizeMax = jsonObject.getInt("team_max_size");
+                }else{
+                    teamSizeMin = 0;
+                    teamSizeMax = 0;
+                }
                 JSONArray jsonArrayStream = jsonObject.getJSONArray("streams");
                 for(int j = 0; j< jsonArrayStream.length(); j++){
                     String stream_id = jsonArrayStream.getJSONObject(j).getString("id");
@@ -149,16 +156,7 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
 
                 mTournamentDetail = tournamentDetail;
 
-                /*mTInfoList.add(new TournamentInformationItem("Discipline", mTournamentDetail.getmDiscipline()));
-                mTInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmTeamSizeMax())+" Teams"));
-                mTInfoList.add(new TournamentInformationItem("Organizer", mTournamentDetail.getmOrganization()));
-                mTInfoList.add(new TournamentInformationItem("Start Date", mTournamentDetail.getmDateStart().toString()));
-                mTInfoList.add(new TournamentInformationItem("End Date", mTournamentDetail.getmDateEnd().toString()));
-                mTInfoList.add(new TournamentInformationItem("Description", mTournamentDetail.getmDescription()));
-                mTInfoList.add(new TournamentInformationItem("Price", mTournamentDetail.getmPrize()));
-                mTInfoList.add(new TournamentInformationItem("Rules", mTournamentDetail.getmRules())); */
-
-               fill_with_data();
+                fill_with_data();
                 mTInformationAdapter.notifyDataSetChanged();
                 //System.out.println(mTournamentDetail.toString());
             } catch (ParseException e) {
@@ -170,10 +168,13 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
     }
 
     public void fill_with_data(){
-
             List<TournamentInformationItem> list = new ArrayList<>();
             mTInfoList.add(new TournamentInformationItem("Discipline", mTournamentDetail.getmDiscipline()));
-            mTInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmTeamSizeMax())+" Teams"));
+            if(mTournamentDetail.getmParticipantType().equals("team")){
+                mTInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmSize())+" Teams"));
+            }else{
+                mTInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmSize())+" Players"));
+            }
             mTInfoList.add(new TournamentInformationItem("Organizer", mTournamentDetail.getmOrganization()));
             mTInfoList.add(new TournamentInformationItem("Start Date", mTournamentDetail.getmDateStart().toString()));
             mTInfoList.add(new TournamentInformationItem("End Date", mTournamentDetail.getmDateEnd().toString()));
