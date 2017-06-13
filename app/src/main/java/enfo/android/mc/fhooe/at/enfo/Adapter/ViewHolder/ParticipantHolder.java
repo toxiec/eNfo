@@ -19,7 +19,7 @@ public class ParticipantHolder extends RecyclerView.ViewHolder {
 
     public ParticipantHolder(Context _context, View _itemView) {
         super(_itemView);
-        mContext = mContext;
+        mContext = _context;
 
         mParticipantName = (TextView) _itemView.findViewById(R.id.tv_participant_name);
         mParticipantLogo = (ImageView) _itemView.findViewById(R.id.iv_participant_logo);

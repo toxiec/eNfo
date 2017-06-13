@@ -124,35 +124,39 @@ public class ParticipantFragment extends Fragment implements JSONTask.AsyncRespo
                     ParticipantLogo participantLogo = new ParticipantLogo(icon_large, extra_small, medium_small);
 
                     String country = jsonObject.getString("country");
-
-                    JSONArray jsonArrayLineup = jsonObject.getJSONArray("lineup");
                     List<Player> playerList = new ArrayList<>();
-                    for(int j = 0; j<jsonArrayLineup.length(); j++){
-                        String playerName = jsonArrayLineup.getJSONObject(i).getString("name");
-                        String playerCountry = jsonArrayLineup.getJSONObject(i).getString("country");
+                    try {
+                        JSONArray jsonArrayLineup = jsonObject.getJSONArray("lineup");
+                        for(int j = 0; j<jsonArrayLineup.length(); j++){
+                            String playerName = jsonArrayLineup.getJSONObject(i).getString("name");
+                            String playerCountry = jsonArrayLineup.getJSONObject(i).getString("country");
 
-                        JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
-                        List<String> playercustomField = new ArrayList<>();
-                        String fieldType = jsonObjectCustomField.getString("type");
-                        String fieldLabel = jsonObjectCustomField.getString("label");
-                        String fieldValue = jsonObjectCustomField.getString("value");
-                        playercustomField.add(fieldType);
-                        playercustomField.add(fieldLabel);
-                        playercustomField.add(fieldValue);
+                            JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
+                            List<String> playercustomField = new ArrayList<>();
+                            String fieldType = jsonObjectCustomField.getString("type");
+                            String fieldLabel = jsonObjectCustomField.getString("label");
+                            String fieldValue = jsonObjectCustomField.getString("value");
+                            playercustomField.add(fieldType);
+                            playercustomField.add(fieldLabel);
+                            playercustomField.add(fieldValue);
 
-                        Player player = new Player(playerName, playerCountry, playercustomField);
-                        playerList.add(player);
+                            Player player = new Player(playerName, playerCountry, playercustomField);
+                            playerList.add(player);
+                        }
+                    }catch(JSONException _e){
+
                     }
-
                     List<String> customField = new ArrayList<>();
+                    try{
+                        String type = jsonObject.getString("type");
+                        String label = jsonObject.getString("label");
+                        String value = jsonObject.getString("value");
+                        customField.add(type);
+                        customField.add(label);
+                        customField.add(value);
+                    }catch(JSONException _e){
 
-                    String type = jsonObject.getString("type");
-                    String label = jsonObject.getString("label");
-                    String value = jsonObject.getString("value");
-                    customField.add(type);
-                    customField.add(label);
-                    customField.add(value);
-
+                    }
                     Participant participant = new Participant(id, name, participantLogo, country,  playerList, customField);
                     mParticipantList.add(participant);
                     mParticipantAdapter.notifyDataSetChanged();

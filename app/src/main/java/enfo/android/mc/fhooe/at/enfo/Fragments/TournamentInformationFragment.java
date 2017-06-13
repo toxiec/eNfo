@@ -169,7 +169,7 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
 
     public void fill_with_data(){
             List<TournamentInformationItem> list = new ArrayList<>();
-            mTInfoList.add(new TournamentInformationItem("Discipline", mTournamentDetail.getmDiscipline()));
+            mTInfoList.add(new TournamentInformationItem("Discipline", mDiscipline.getmName()));
             if(mTournamentDetail.getmParticipantType().equals("team")){
                 mTInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmSize())+" Teams"));
             }else{
