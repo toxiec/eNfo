@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="text_color_white">#FFFFFF</color>
+    <color name="win_color_green">#04B431</color>
+    <color name="loss_color_red">#FE2E2E</color>
 </resources>
