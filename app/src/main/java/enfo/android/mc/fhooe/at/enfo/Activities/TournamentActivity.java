@@ -17,6 +17,7 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.SectionsPagerAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
+import enfo.android.mc.fhooe.at.enfo.Fragments.MatchFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.ParticipantFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.TournamentInformationFragment;
@@ -144,6 +145,9 @@ public class TournamentActivity extends AppCompatActivity {
         participantFragment.setArguments(_bundle);
         mSectionsPagerAdapter.addFragment(participantFragment, "Participants");
 
+        MatchFragment matchFragment = new MatchFragment();
+        matchFragment.setArguments(_bundle);
+        mSectionsPagerAdapter.addFragment(matchFragment, "Matches");
         _viewPager.setAdapter(mSectionsPagerAdapter);
     }
 }

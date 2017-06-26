@@ -13,6 +13,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
