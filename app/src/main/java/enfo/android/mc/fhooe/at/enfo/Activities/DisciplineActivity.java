@@ -76,31 +76,31 @@ public class DisciplineActivity extends AppCompatActivity {
     private void setUpImageView(){
         if(mDiscipline != null){
             switch(mDiscipline.getmId()){
-                case "counterstrike_go":{
+                case counterstrike_go:{
                     Glide.with(this).load(R.drawable.app_bar_image_csgo).into(mDisciplineImage);
                     break;
                 }
-                case "leagueoflegends":{
+                case leagueoflegends:{
                     Glide.with(this).load(R.drawable.app_bar_image_lol).into(mDisciplineImage);
                     break;
                 }
-                case "dota2":{
+                case dota2:{
                     Glide.with(this).load(R.drawable.app_bar_image_dota2).into(mDisciplineImage);
                     break;
                 }
-                case "hearthstone":{
+                case hearthstone:{
                     Glide.with(this).load(R.drawable.app_bar_image_hearthstone).into(mDisciplineImage);
                     break;
                 }
-                case "starcraft2_lotv":{
+                case starcraft2_lotv:{
                     Glide.with(this).load(R.drawable.app_bar_image_sc2).into(mDisciplineImage);
                     break;
                 }
-                case "overwatch":{
+                case overwatch:{
                     Glide.with(this).load(R.drawable.app_bar_image_ow).into(mDisciplineImage);
                     break;
                 }
-                case "heroesofthestorm":{
+                case heroesofthestorm:{
                     Glide.with(this).load(R.drawable.app_bar_image_hots).into(mDisciplineImage);
                     break;
                 }

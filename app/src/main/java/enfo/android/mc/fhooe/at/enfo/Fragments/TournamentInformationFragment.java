@@ -93,8 +93,8 @@ public class TournamentInformationFragment extends Fragment implements JSONTask.
         builder.append(mTournamentInformationURL);
         builder.append(mTournament.getmID());
         String url = builder.toString();
-        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        jsonTask.execute(url);
+        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        //jsonTask.execute(url);
     }
 
     private void parseTournamentInformation() {

@@ -46,31 +46,31 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
         mDiscipline = _discipline;
 
         switch(mDiscipline.getmId()){
-            case "counterstrike_go" : {
+            case counterstrike_go : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_csgo).into(mDisciplineLogo);
                 break;
             }
-            case "dota2" : {
+            case dota2 : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_dota2).into(mDisciplineLogo);
                 break;
             }
-            case "hearthstone" : {
+            case hearthstone : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_hs).into(mDisciplineLogo);
                 break;
             }
-            case "leagueoflegends" : {
+            case leagueoflegends : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_lol).into(mDisciplineLogo);
                 break;
             }
-            case "starcraft2_lotv":{
+            case starcraft2_lotv:{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_sc2_lotv).into(mDisciplineLogo);
                 break;
             }
-            case "overwatch":{
+            case overwatch:{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_ow).into(mDisciplineLogo);
                 break;
             }
-            case "heroesofthestorm":{
+            case heroesofthestorm:{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_hots).into(mDisciplineLogo);
                 break;
             }

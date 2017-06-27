@@ -27,25 +27,16 @@ public class JSONTask extends AsyncTask<String, String, String> {
     private HttpURLConnection connection = null;
     private BufferedReader reader = null;
     private ProgressDialog dialog;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private AsyncResponse mListener = null;
 
 
-    public JSONTask(Context _context, SwipeRefreshLayout _srl, AsyncResponse listener){
-            dialog = new ProgressDialog(_context);
-            mSwipeRefreshLayout = _srl;
-            mListener = listener;
+    public JSONTask(AsyncResponse listener){
+        mListener = listener;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if(mSwipeRefreshLayout != null){
-            mSwipeRefreshLayout.setRefreshing(true);
-        }else{
-            dialog.setMessage("Please Wait");
-            dialog.show();
-        }
     }
 
     @Override
@@ -86,14 +77,6 @@ public class JSONTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
-        if (mSwipeRefreshLayout != null) {
-            if(mSwipeRefreshLayout.isRefreshing()){
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }
         mListener.processFinish(result);
         //parseDisciplineJSON();
     }

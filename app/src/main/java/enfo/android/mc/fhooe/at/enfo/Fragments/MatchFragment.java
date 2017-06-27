@@ -98,8 +98,8 @@ public class MatchFragment extends Fragment implements JSONTask.AsyncResponse {
         urlbuilder.append(mMatchesURL);
         urlbuilder.append(mTournament.getmID()+"/matches");
         String url = urlbuilder.toString();
-        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        jsonTask.execute(url);
+        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        //jsonTask.execute(url);
     }
 
     public void parseMatches(){

@@ -9,56 +9,54 @@ import com.bumptech.glide.Glide;
 
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class DisciplineHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class DisciplineHolder extends RecyclerView.ViewHolder{
     private ImageView mDisciplineImage;
-    private DisciplineAdapter.ClickListener mClickListener;
     private Context mContext;
     private Discipline mDiscipline;
 
     public DisciplineHolder(Context _context , View _itemView) {
         super(_itemView);
         mContext = _context;
-        _itemView.setOnClickListener(this);
         mDisciplineImage = (ImageView) _itemView.findViewById(R.id.iv_discipline);
     }
 
-    public void bindDiscipline(Discipline _discipline, DisciplineAdapter.ClickListener _clickListener){
+    public void bindDiscipline(Discipline _discipline){
         mDiscipline = _discipline;
-        mClickListener = _clickListener;
 
         if(mDiscipline.getmId() == null){
             mDisciplineImage.setImageDrawable(null);
         }
 
         switch (mDiscipline.getmId()){
-            case "counterstrike_go" : {
+            case  counterstrike_go: {
                 Glide.with(mContext).load(R.drawable.img_discipline_csgo).into(mDisciplineImage);
                 //mDisciplineImage.setImageResource(R.drawable.img_discipline_csgo);
                 break;
             }
-            case "dota2" : {
+            case dota2 : {
                 Glide.with(mContext).load(R.drawable.img_discipline_dota2).into(mDisciplineImage);
                 break;
             }
-            case "hearthstone" : {
+            case hearthstone : {
                 Glide.with(mContext).load(R.drawable.img_discipline_hs).into(mDisciplineImage);
                 break;
             }
-            case "leagueoflegends" : {
+            case leagueoflegends : {
                 Glide.with(mContext).load(R.drawable.img_discipline_lol).into(mDisciplineImage);
                 break;
             }
-            case "starcraft2_lotv":{
+            case starcraft2_lotv:{
                 Glide.with(mContext).load(R.drawable.img_discipline_sc2).into(mDisciplineImage);
                 break;
             }
-            case "overwatch":{
+            case overwatch:{
                 Glide.with(mContext).load(R.drawable.img_discipline_ow).into(mDisciplineImage);
                 break;
             }
-            case "heroesofthestorm" :{
+            case heroesofthestorm :{
                 Glide.with(mContext).load(R.drawable.img_discipline_hots).into(mDisciplineImage);
                 break;
             }
@@ -68,10 +66,5 @@ public class DisciplineHolder extends RecyclerView.ViewHolder implements View.On
         }
 
     }
-    @Override
-    public void onClick(View v) {
-        if(mClickListener != null){
-            mClickListener.itemClicked(v, getAdapterPosition());
-        }
-    }
+
 }

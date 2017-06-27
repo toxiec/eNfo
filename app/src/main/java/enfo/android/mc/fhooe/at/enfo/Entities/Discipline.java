@@ -5,9 +5,12 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
+
 public class Discipline implements Serializable {
     /**An identifier for a discipline*/
-    private String mId;
+    private DisciplineID mId;
     /**The official name of the discipline.*/
     private String mName;
     /**The short name of the discipline.*/
@@ -20,7 +23,7 @@ public class Discipline implements Serializable {
     /**The Logo off the Discipline*/
     private Image mLogo;
 
-    public Discipline(String _id, String _name, String _shortname, String _fullname, String _copyrights){
+    public Discipline(DisciplineID _id, String _name, String _shortname, String _fullname, String _copyrights){
         mId = _id;
         mName = _name;
         mShortname = _shortname;
@@ -28,7 +31,7 @@ public class Discipline implements Serializable {
         mCopyrights = _copyrights;
     }
 
-    public String getmId() {
+    public DisciplineID getmId() {
         return mId;
     }
 

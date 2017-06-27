@@ -10,17 +10,15 @@ import java.util.List;
 
 import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.DisciplineHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 
 public class DisciplineAdapter extends RecyclerView.Adapter<DisciplineHolder>{
-    List<Discipline> mDisciplineList;
     private Context mContext;
     private int mItemResource;
-    private ClickListener mClickListener;
 
-    public DisciplineAdapter(Context _context, int _itemResource, List<Discipline> _list){
+    public DisciplineAdapter(Context _context, int _itemResource){
         mContext = _context;
         mItemResource = _itemResource;
-        mDisciplineList = _list;
     }
 
     @Override
@@ -31,20 +29,12 @@ public class DisciplineAdapter extends RecyclerView.Adapter<DisciplineHolder>{
 
     @Override
     public void onBindViewHolder(DisciplineHolder holder, int position) {
-        Discipline discipline = mDisciplineList.get(position);
-        holder.bindDiscipline(discipline, mClickListener);
+        Discipline discipline = EntityManager.getInstance().getDisciplineList().get(position);
+        holder.bindDiscipline(discipline);
     }
 
     @Override
     public int getItemCount() {
-        return mDisciplineList.size();
-    }
-
-    public interface ClickListener{
-        public void itemClicked(View view, int position);
-    }
-
-    public void setClickListener(ClickListener _clickListener){
-        mClickListener = _clickListener;
+        return EntityManager.getInstance().getDisciplineList().size();
     }
 }

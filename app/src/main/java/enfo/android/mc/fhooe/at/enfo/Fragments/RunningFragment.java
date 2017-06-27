@@ -96,8 +96,8 @@ public class RunningFragment extends Fragment implements JSONTask.AsyncResponse 
         urlbuilder.append("&discipline="+mDiscipline.getmId());
         urlbuilder.append(("&status=running"));
         String url = urlbuilder.toString();
-        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        jsonTask.execute(url);
+        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        //jsonTask.execute(url);
     }
 
     private void parseRunningTnmt() {

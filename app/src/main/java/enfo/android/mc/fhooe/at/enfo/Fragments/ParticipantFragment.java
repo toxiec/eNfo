@@ -93,8 +93,8 @@ public class ParticipantFragment extends Fragment implements JSONTask.AsyncRespo
         builder.append(mURL);
         builder.append(mTournament.getmID()+"/participants");
         String url = builder.toString();
-        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        jsonTask.execute(url);
+        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
+        //jsonTask.execute(url);
     }
 
     @Override

@@ -94,8 +94,8 @@ public class FeaturedTournamentFragment extends Fragment implements JSONTask.Asy
         //get Tournaments of specified Discipline
         urlbuilder.append("&discipline="+mDiscipline.getmId());
         String url = urlbuilder.toString();
-        JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        jsonTask.execute(url);
+        //JSONTask jsonTask = new JSONTask(getActivity());
+        //jsonTask.execute(url);
     }
 
     private void parseFeaturedTnmt() {

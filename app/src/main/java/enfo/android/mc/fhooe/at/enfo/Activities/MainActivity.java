@@ -23,10 +23,14 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
+import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class MainActivity extends AppCompatActivity implements DisciplineAdapter.ClickListener, JSONTask.AsyncResponse{
+public class MainActivity extends AppCompatActivity implements ModelChangeListener{
     private static final String TAG = "MainActivity";
     /**Key to get Discipline Data from the Bundle */
     private static final String DISCIPLINE_KEY = "discipline_key";
@@ -44,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
     private RecyclerView mDisciplineRecycleView;
     /**Adapter to populate the mDisciplineRecycleView*/
     private DisciplineAdapter mDisciplineAdapter;
-    /**List which contains the fetched Disciples*/
-    private List<Discipline> mDisciplineList = new ArrayList<>();
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -54,20 +57,37 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         setContentView(R.layout.activity_main);
 
         if(NetworkCheck.isNetworkAvailable(this)){
+            //View bei Model anmelden
+            EntityManager.getInstance().addModelChangeListener(this);
+
             mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_activity_main);
             mDisciplineRecycleView = (RecyclerView) findViewById(R.id.rv_discipline);
-            getDisciplines();
-            mDisciplineAdapter = new DisciplineAdapter(this, R.layout.item_disciple_layout, mDisciplineList);
+            EntityManager.getInstance().requestDiscipline();
+
+            mDisciplineAdapter = new DisciplineAdapter(this, R.layout.item_disciple_layout);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
             mDisciplineRecycleView.setLayoutManager(mLayoutManager);
             mDisciplineRecycleView.setItemAnimator(new DefaultItemAnimator());
             mDisciplineRecycleView.setAdapter(mDisciplineAdapter);
             mDisciplineRecycleView.setHasFixedSize(true);
-            mDisciplineAdapter.setClickListener(this);
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    getDisciplines();
+                    EntityManager.getInstance().requestDiscipline();
+                }
+            });
+
+            ItemClickSupport.addTo(mDisciplineRecycleView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    Discipline discipline = EntityManager.getInstance().getDisciplineList().get(position);
+                    Log.i(TAG, discipline.getmFullname()+" Item clicked");
+                    Toast.makeText(getApplicationContext(), discipline.getmName(), Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(DISCIPLINE_KEY, discipline);
+                    Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
                 }
             });
         }else{
@@ -75,72 +95,24 @@ public class MainActivity extends AppCompatActivity implements DisciplineAdapter
         }
     }
 
-    /**
-     * Fetch Discipline from the API
-     */
-    private void getDisciplines() {
-        JSONTask jsonTask = new JSONTask(this, mSwipeRefreshLayout, this);
-        jsonTask.execute(mDisciplesURL);
-        //parseDisciplineJSON();
-        //new JSONTask().execute(mDisciplesURL);
-    }
 
-    /**
-     * Onclick Method for the RecyclerView
-     * @param view
-     * @param position of the item which has been clicked
-     */
+
     @Override
-    public void itemClicked(View view, int position) {
-        Discipline discipline = mDisciplineList.get(position);
-        Log.i(TAG, discipline.getmFullname()+" Item clicked");
-        Toast.makeText(getApplicationContext(), discipline.getmName(), Toast.LENGTH_SHORT).show();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(DISCIPLINE_KEY, discipline);
-        Intent i = new Intent(MainActivity.this, DisciplineActivity.class);
-        i.putExtras(bundle);
-        startActivity(i);
-    }
-
-    /**
-     * Creates Tournament Objects from the received Discipline JSON and adds it to the Listview.
-     */
-    private void parseDisciplineJSON(){
-        //Only Adds Disciplines which contain the ID from this Array (Filtering)
-        String[] games = {"counterstrike_go","dota2", "hearthstone", "leagueoflegends","starcraft2_lotv","overwatch", "heroesofthestorm"};
-        if(mJSONResult == null){
-            Toast.makeText(getApplicationContext(), "No Games Found", Toast.LENGTH_SHORT).show();
-        }else{
-            mDisciplineList.clear();
-            try {
-                JSONArray jsonarray = new JSONArray(mJSONResult);
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject jsonobject = jsonarray.getJSONObject(i);
-                    String id = jsonobject.getString("id");
-                    String name = jsonobject.getString("name");
-                    String shortname = jsonobject.getString("shortname");
-                    String fullname = jsonobject.getString("fullname");
-                    String copyrights = jsonobject.getString("copyrights");
-                    System.out.println(id);
-                    if(Arrays.asList(games).contains(id)){
-                        Discipline discipline = new Discipline(id,name,shortname,fullname,copyrights);
-                        //mDisciplineList.add(discipline);
-
-                        //mDisciplineAdapter.add(discipline);
-                        //mDisciplineAdapter.notifyDataSetChanged();
-                        mDisciplineList.add(discipline);
-                    }
-                }
+    public void onChangeOccured(ChangeEvent e) {
+        switch (e.mEventType){
+            case startDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isDisciplineDownloadRunning());
+                break;
+            }
+            case finishDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isDisciplineDownloadRunning());
                 mDisciplineAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                break;
+            }
+            case errorOnDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isDisciplineDownloadRunning());
+                Toast.makeText(this, "Error on Download", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public void processFinish(String output) {
-        mJSONResult = output;
-        parseDisciplineJSON();
     }
 }
