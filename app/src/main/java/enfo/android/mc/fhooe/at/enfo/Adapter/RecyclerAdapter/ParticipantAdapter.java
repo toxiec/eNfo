@@ -12,17 +12,16 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.ParticipantHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 
 public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantHolder>{
     private Context mContext;
     private int mItemResource;
-    private List<Participant> mParticipantList;
-    public ParticipantAdapter(Context _context, int _itemResource, List<Participant> _list){
+    public ParticipantAdapter(Context _context, int _itemResource){
         mContext = _context;
         mItemResource = _itemResource;
-        mParticipantList = _list;
     }
 
     @Override
@@ -33,12 +32,12 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantHolder>{
 
     @Override
     public void onBindViewHolder(ParticipantHolder holder, int position) {
-        Participant participant = mParticipantList.get(position);
+        Participant participant = EntityManager.getInstance().getParticipantList().get(position);
         holder.bindTournament(participant);
     }
 
     @Override
     public int getItemCount() {
-        return mParticipantList.size();
+        return EntityManager.getInstance().getParticipantList().size();
     }
 }

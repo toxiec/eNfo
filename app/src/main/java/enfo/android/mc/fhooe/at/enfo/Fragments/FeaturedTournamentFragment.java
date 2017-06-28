@@ -28,11 +28,15 @@ import enfo.android.mc.fhooe.at.enfo.Activities.TournamentActivity;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
+import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class FeaturedTournamentFragment extends Fragment implements JSONTask.AsyncResponse {
+public class FeaturedTournamentFragment extends Fragment implements ModelChangeListener {
 
     private static final String TAG = "FTF";
     private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1";
@@ -59,23 +63,27 @@ public class FeaturedTournamentFragment extends Fragment implements JSONTask.Asy
             }
         }
 
+        EntityManager.getInstance().addModelChangeListener(this);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_featured_tournaments);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getFeaturedTournaments();
+                EntityManager.getInstance().requestTournaments(mDiscipline, true);
             }
         });
 
         mFeaturedTournamentsRecyclerView = (RecyclerView) view.findViewById(R.id.rv_featuredMatches);
-        getFeaturedTournaments();
-        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.item_featured_tournament_layout, mDiscipline, mTournamentList);
+        EntityManager.getInstance().requestTournaments(mDiscipline, true);
+        mTournamentsAdapter = new TournamentsAdapter(getActivity(), R.layout.item_featured_tournament_layout, mDiscipline, TournamentType.featured);
         mFeaturedTournamentsRecyclerView.setAdapter(mTournamentsAdapter);
         mFeaturedTournamentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ItemClickSupport.addTo(mFeaturedTournamentsRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Tournament tournament = mTournamentList.get(position);
+                Tournament tournament = EntityManager.getInstance().getTournamentList(TournamentType.featured).get(position);
+                EntityManager.getInstance().setCurrentTournament(tournament);
+                EntityManager.getInstance().setCurrentDiscipline(mDiscipline);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(TOURNAMENT_KEY, tournament);
                 bundle.putSerializable(DISCIPLINE_KEY, mDiscipline);
@@ -88,66 +96,22 @@ public class FeaturedTournamentFragment extends Fragment implements JSONTask.Asy
         return view;
     }
 
-    private void getFeaturedTournaments(){
-        StringBuilder urlbuilder = new StringBuilder();
-        urlbuilder.append(mFeaturedTournamentsURL);
-        //get Tournaments of specified Discipline
-        urlbuilder.append("&discipline="+mDiscipline.getmId());
-        String url = urlbuilder.toString();
-        //JSONTask jsonTask = new JSONTask(getActivity());
-        //jsonTask.execute(url);
-    }
-
-    private void parseFeaturedTnmt() {
-        if(mJSONResult == null){
-            Toast.makeText(getContext(), "No Featured Tournaments Found", Toast.LENGTH_SHORT).show();
-        }else{
-            mTournamentList.clear();
-            try {
-                JSONArray jsonarray = new JSONArray(mJSONResult);
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject jsonobject = jsonarray.getJSONObject(i);
-                    String id = jsonobject.getString("id");
-                    String discipline = jsonobject.getString("discipline");
-                    String name = jsonobject.getString("name");
-                    String fullname = jsonobject.getString("full_name");
-                    String status = jsonobject.getString("full_name");
-
-                    String dateStart = jsonobject.getString("date_start");
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date_start = sdf.parse(dateStart);
-
-                    String dateEnd = jsonobject.getString("date_start");
-                    Date date_end = sdf.parse(dateEnd);
-
-                    boolean online = jsonobject.getBoolean("online");
-                    boolean publicT = jsonobject.getBoolean("public");
-                    String location = jsonobject.getString("location");
-                    String country = jsonobject.getString("country");
-                    int size = jsonobject.getInt("size");
-
-
-                    Tournament tournament = new Tournament(id, discipline, name,fullname,status,date_start,date_end,
-                                online,publicT,location,country,size);
-                        //mDisciplineList.add(discipline);
-
-                    //mTournamentAdapter.add(tournament);
-                    //mTournamentAdapter.notifyDataSetChanged();
-                    mTournamentList.add(tournament);
-                }
+    @Override
+    public void onChangeOccured(ChangeEvent e) {
+        switch (e.mEventType){
+            case startDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isTournamentDownloadRunning());
+                break;
+            }
+            case finishDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isTournamentDownloadRunning());
                 mTournamentsAdapter.notifyDataSetChanged();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
+                break;
+            }
+            case errorOnDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isTournamentDownloadRunning());
+                Toast.makeText(getActivity(), "Error on Download", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public void processFinish(String output) {
-        mJSONResult = output;
-        parseFeaturedTnmt();
     }
 }

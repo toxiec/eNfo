@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
                 @Override
                 public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                     Discipline discipline = EntityManager.getInstance().getDisciplineList().get(position);
+                    EntityManager.getInstance().setCurrentDiscipline(discipline);
                     Log.i(TAG, discipline.getmFullname()+" Item clicked");
                     Toast.makeText(getApplicationContext(), discipline.getmName(), Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();

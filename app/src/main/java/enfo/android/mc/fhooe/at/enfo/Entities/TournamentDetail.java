@@ -3,6 +3,7 @@ package enfo.android.mc.fhooe.at.enfo.Entities;
 import java.util.Date;
 import java.util.List;
 
+import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
 import enfo.android.mc.fhooe.at.enfo.Objects.Stream;
 
 /**

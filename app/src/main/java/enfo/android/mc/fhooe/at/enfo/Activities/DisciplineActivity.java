@@ -20,6 +20,9 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.SectionsPagerAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Fragments.FeaturedTournamentFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
@@ -27,7 +30,7 @@ import enfo.android.mc.fhooe.at.enfo.R;
  * Class which contains a Tab Layout to Display Featured, Running and Completed Tournaments for
  * a specific Discipline
  */
-public class DisciplineActivity extends AppCompatActivity {
+public class DisciplineActivity extends AppCompatActivity{
 
     private static final String TAG = "DisciplineActivity";
     /**Key to get Discipline Data from the Bundle */

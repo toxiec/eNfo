@@ -17,7 +17,7 @@ import java.net.URL;
 public class JSONTask extends AsyncTask<String, String, String> {
 
     public interface AsyncResponse {
-        void processFinish(String output);
+        void processFinish(String jsonResult);
     }
 
     /**Key will be used to authenticate your application on the Toornament API*/

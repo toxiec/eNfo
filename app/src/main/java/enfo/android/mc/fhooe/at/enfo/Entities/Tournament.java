@@ -3,6 +3,8 @@ package enfo.android.mc.fhooe.at.enfo.Entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
+
 /**
  * Object which contains information about the Tournaments of various eSport Tournaments
  */

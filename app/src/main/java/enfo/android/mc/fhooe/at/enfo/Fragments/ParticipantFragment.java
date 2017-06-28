@@ -29,13 +29,16 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Entities.TournamentDetail;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.Objects.ParticipantLogo;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.Stream;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
-public class ParticipantFragment extends Fragment implements JSONTask.AsyncResponse {
+public class ParticipantFragment extends Fragment implements ModelChangeListener {
     private static final String DISCIPLINE_KEY = "discipline_key";
     private static final String TOURNAMENT_KEY = "tournament_key";
     private String mURL = "https://api.toornament.com/v1/tournaments/";
@@ -65,16 +68,17 @@ public class ParticipantFragment extends Fragment implements JSONTask.AsyncRespo
                     mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
                 }
             }
+            EntityManager.getInstance().addModelChangeListener(this);
             mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_participant);
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    getParticipants();
+                    EntityManager.getInstance().requestParticipants(mTournament);
                 }
             });
             mParticipantRecylcerView = (RecyclerView) view.findViewById(R.id.rv_participant);
-            getParticipants();
-            mParticipantAdapter = new ParticipantAdapter(getActivity(), R.layout.item_participant, mParticipantList);
+            EntityManager.getInstance().requestParticipants(mTournament);
+            mParticipantAdapter = new ParticipantAdapter(getActivity(), R.layout.item_participant);
             mParticipantRecylcerView.setAdapter(mParticipantAdapter);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             mParticipantRecylcerView.setLayoutManager(layoutManager);
@@ -88,83 +92,21 @@ public class ParticipantFragment extends Fragment implements JSONTask.AsyncRespo
         return view;
     }
 
-    public void getParticipants(){
-        StringBuilder builder = new StringBuilder();
-        builder.append(mURL);
-        builder.append(mTournament.getmID()+"/participants");
-        String url = builder.toString();
-        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        //jsonTask.execute(url);
-    }
-
     @Override
-    public void processFinish(String output) {
-        mJSONResult = output;
-        parseParticipants();
-    }
-
-    private void parseParticipants(){
-        if(mJSONResult == null){
-            Toast.makeText(getContext(), "No Information Found", Toast.LENGTH_SHORT).show();
-        }else{
-            mParticipantList.clear();
-            try {
-                JSONArray jsonarray = new JSONArray(mJSONResult);
-                for(int i = 0; i<jsonarray.length(); i++){
-                    JSONObject jsonObject = jsonarray.getJSONObject(i);
-
-                    String id = jsonObject.getString("id");
-                    String name = jsonObject.getString("name");
-
-                    JSONObject jsonLogoObject = jsonObject.getJSONObject("logo");
-                    String icon_large = jsonLogoObject.getString("icon_large_square");
-                    String extra_small = jsonLogoObject.getString("extra_small_square");
-                    String medium_small = jsonLogoObject.getString("medium_small_square");
-
-                    ParticipantLogo participantLogo = new ParticipantLogo(icon_large, extra_small, medium_small);
-
-                    String country = jsonObject.getString("country");
-                    List<Player> playerList = new ArrayList<>();
-                    try {
-                        JSONArray jsonArrayLineup = jsonObject.getJSONArray("lineup");
-                        for(int j = 0; j<jsonArrayLineup.length(); j++){
-                            String playerName = jsonArrayLineup.getJSONObject(i).getString("name");
-                            String playerCountry = jsonArrayLineup.getJSONObject(i).getString("country");
-
-                            JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
-                            List<String> playercustomField = new ArrayList<>();
-                            String fieldType = jsonObjectCustomField.getString("type");
-                            String fieldLabel = jsonObjectCustomField.getString("label");
-                            String fieldValue = jsonObjectCustomField.getString("value");
-                            playercustomField.add(fieldType);
-                            playercustomField.add(fieldLabel);
-                            playercustomField.add(fieldValue);
-
-                            Player player = new Player(playerName, playerCountry, playercustomField);
-                            playerList.add(player);
-                        }
-                    }catch(JSONException _e){
-
-                    }
-                    List<String> customField = new ArrayList<>();
-                    try{
-                        String type = jsonObject.getString("type");
-                        String label = jsonObject.getString("label");
-                        String value = jsonObject.getString("value");
-                        customField.add(type);
-                        customField.add(label);
-                        customField.add(value);
-                    }catch(JSONException _e){
-
-                    }
-                    Participant participant = new Participant(id, name, participantLogo, country,  playerList, customField);
-                    mParticipantList.add(participant);
-                    mParticipantAdapter.notifyDataSetChanged();
-                }
-
-                //System.out.println(mTournamentDetail.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+    public void onChangeOccured(ChangeEvent e) {
+        switch (e.mEventType){
+            case startDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isParticipantDownloadRunning());
+                break;
+            }
+            case finishDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isParticipantDownloadRunning());
+                mParticipantAdapter.notifyDataSetChanged();
+                break;
+            }
+            case errorOnDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isParticipantDownloadRunning());
+                Toast.makeText(getActivity(), "Error on Download", Toast.LENGTH_SHORT).show();
             }
         }
     }

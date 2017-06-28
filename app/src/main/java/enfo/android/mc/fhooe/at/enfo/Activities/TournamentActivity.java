@@ -21,10 +21,13 @@ import enfo.android.mc.fhooe.at.enfo.Fragments.MatchFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.ParticipantFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.RunningFragment;
 import enfo.android.mc.fhooe.at.enfo.Fragments.TournamentInformationFragment;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
-public class TournamentActivity extends AppCompatActivity {
+public class TournamentActivity extends AppCompatActivity{
     private static final String TAG = "Tournament Activity";
     private static final String TOURNAMENT_KEY = "tournament_key";
     private Tournament mTournament;
@@ -66,10 +69,6 @@ public class TournamentActivity extends AppCompatActivity {
                     mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
                 }
             }
-
-            /*Toolbar mActionToolbar = (Toolbar) findViewById(R.id.toolbar_tournament_activity);
-            setSupportActionBar(mActionToolbar);
-            getSupportActionBar().setTitle(mTournament.getmName());*/
 
             mDisciplineImage = (ImageView) findViewById(R.id.app_bar_image_tournament_activity);
             mViewPager = (ViewPager) findViewById(R.id.container_tournament_activity);

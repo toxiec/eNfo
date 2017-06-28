@@ -13,21 +13,19 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.TournamentHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 
 /**
  * Created by David on 26.06.2017.
  */
 
 public class MatchAdapter extends RecyclerView.Adapter<MatchHolder> {
-    List<Match> mMatchList;
     private Context mContext;
     private int mItemResource;
-    private Discipline mDiscipline;
 
-    public MatchAdapter(Context _context, int _itemResource,List<Match> _list){
+    public MatchAdapter(Context _context, int _itemResource){
         mContext = _context;
         mItemResource = _itemResource;
-        mMatchList = _list;
     }
 
     @Override
@@ -38,12 +36,12 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchHolder> {
 
     @Override
     public void onBindViewHolder(MatchHolder holder, int position) {
-        Match match = mMatchList.get(position);
-        holder.bindMatch(match, mDiscipline);
+        Match match = EntityManager.getInstance().getMatchesList().get(position);
+        holder.bindMatch(match);
     }
 
     @Override
     public int getItemCount() {
-        return mMatchList.size();
+        return EntityManager.getInstance().getMatchesList().size();
     }
 }

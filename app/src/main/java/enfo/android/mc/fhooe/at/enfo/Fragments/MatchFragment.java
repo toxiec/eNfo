@@ -27,6 +27,9 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
+import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
@@ -35,7 +38,7 @@ import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
  * Created by David on 26.06.2017.
  */
 
-public class MatchFragment extends Fragment implements JSONTask.AsyncResponse {
+public class MatchFragment extends Fragment implements ModelChangeListener {
     private static final String TAG = "MatchFragment";
     private final String mMatchesURL = "https://api.toornament.com/v1/tournaments/";
     private String mJSONResult;
@@ -66,17 +69,17 @@ public class MatchFragment extends Fragment implements JSONTask.AsyncResponse {
                 mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
             }
         }
-
+        EntityManager.getInstance().addModelChangeListener(this);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_matches);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMatches();
+                EntityManager.getInstance().requestMatches(mTournament);
             }
         });
         mMatchesRecycleView = (RecyclerView) view.findViewById(R.id.rv_matches);
-        getMatches();
-        mMatchesAdapter = new MatchAdapter(getActivity(), R.layout.item_match, mMatchList);
+        EntityManager.getInstance().requestMatches(mTournament);
+        mMatchesAdapter = new MatchAdapter(getActivity(), R.layout.item_match);
         mMatchesRecycleView.setAdapter(mMatchesAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -93,78 +96,22 @@ public class MatchFragment extends Fragment implements JSONTask.AsyncResponse {
         return view;
     }
 
-    public void getMatches(){
-        StringBuilder urlbuilder = new StringBuilder();
-        urlbuilder.append(mMatchesURL);
-        urlbuilder.append(mTournament.getmID()+"/matches");
-        String url = urlbuilder.toString();
-        //JSONTask jsonTask = new JSONTask(getActivity(), mSwipeRefreshLayout, this);
-        //jsonTask.execute(url);
-    }
-
-    public void parseMatches(){
-        if(mJSONResult == null){
-            Toast.makeText(getContext(), "No Matches Found", Toast.LENGTH_SHORT).show();
-        }else{
-            mMatchList.clear();
-            try {
-                JSONArray jsonArray = new JSONArray(mJSONResult);
-                for(int i = 0; i < jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String id = jsonObject.getString("id");
-                    String type = jsonObject.getString("type");
-                    String discipline = jsonObject.getString("discipline");
-                    String status = jsonObject.getString("status");
-                    String tournamentID = jsonObject.getString("tournament_id");
-                    int matchNumber = jsonObject.getInt("number");
-                    int stageNumber = jsonObject.getInt("stage_number");
-                    int groupNumber = jsonObject.getInt("group_number");
-                    int roundNumber = jsonObject.getInt("round_number");
-                    String date = jsonObject.getString("date");
-                    String timezone = jsonObject.getString("timezone");
-                    String matchFormat = jsonObject.getString("match_format");
-
-                    JSONArray jsonArrayOpponents = jsonObject.getJSONArray("opponents");
-                    mOpponentList = new ArrayList<>();
-                    for(int j = 0; j < jsonArrayOpponents.length(); j++){
-
-                        int number = jsonArrayOpponents.getJSONObject(j).getInt("number");
-
-                        JSONObject jsonObjectParticipant = jsonArrayOpponents.getJSONObject(j).getJSONObject("participant");
-
-                        String partId = jsonObjectParticipant.getString("id");
-                        String partName = jsonObjectParticipant.getString("name");
-                        String partCountry = jsonObjectParticipant.getString("country");
-                        Participant participant = new Participant(partId, partName, null, partCountry, null, null);
-
-                        int result = jsonArrayOpponents.getJSONObject(j).getInt("result");
-                        int rank = 0;
-                        try{
-                            rank = jsonArrayOpponents.getJSONObject(j).getInt("rank");
-                        }catch(JSONException e){
-
-                        }
-                        int score = jsonArrayOpponents.getJSONObject(j).getInt("score");
-                        boolean forfeit = jsonArrayOpponents.getJSONObject(j).getBoolean("forfeit");
-                        Opponent opponent = new Opponent(number, participant, result, rank, score, forfeit);
-                        mOpponentList.add(opponent);
-                    }
-
-                    Match match = new Match(id, type, discipline, status, tournamentID, matchNumber, stageNumber,
-                            groupNumber, roundNumber, date, timezone, matchFormat, mOpponentList);
-                    mMatchList.add(match);
-                    mMatchesAdapter.notifyDataSetChanged();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+    @Override
+    public void onChangeOccured(ChangeEvent e) {
+        switch (e.mEventType){
+            case startDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isMatchDownloadRunning());
+                break;
+            }
+            case finishDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isMatchDownloadRunning());
+                mMatchesAdapter.notifyDataSetChanged();
+                break;
+            }
+            case errorOnDownload: {
+                mSwipeRefreshLayout.setRefreshing(EntityManager.getInstance().isMatchDownloadRunning());
+                Toast.makeText(getActivity(), "Error on Download", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-
-    @Override
-    public void processFinish(String output) {
-        mJSONResult = output;
-        parseMatches();
     }
 }

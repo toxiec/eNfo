@@ -6,22 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.TournamentInformationHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 
 public class TournamentInformationAdapter extends RecyclerView.Adapter<TournamentInformationHolder> {
-    List<TournamentInformationItem> mTournamentInformationList;
     private Context mContext;
     private int mItemResource;
     private Discipline mDiscipline;
 
-    public TournamentInformationAdapter(Context _context, int _itemResource, Discipline _discipline, List<TournamentInformationItem> _list){
+    public TournamentInformationAdapter(Context _context, int _itemResource, Discipline _discipline){
         mContext = _context;
         mItemResource = _itemResource;
-        mTournamentInformationList = _list;
         mDiscipline = _discipline;
     }
 
@@ -33,12 +30,12 @@ public class TournamentInformationAdapter extends RecyclerView.Adapter<Tournamen
 
     @Override
     public void onBindViewHolder(TournamentInformationHolder holder, int position) {
-        TournamentInformationItem item = mTournamentInformationList.get(position);
+        TournamentInformationItem item = EntityManager.getInstance().getTournamentInformationList().get(position);
         holder.bindTournament(item, mDiscipline);
     }
 
     @Override
     public int getItemCount() {
-        return mTournamentInformationList.size();
+        return EntityManager.getInstance().getTournamentInformationList().size();
     }
 }

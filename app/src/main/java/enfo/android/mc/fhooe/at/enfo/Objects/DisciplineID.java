@@ -5,7 +5,7 @@ package enfo.android.mc.fhooe.at.enfo.Objects;
  */
 
 public enum DisciplineID {
-        cod_bo3, cod_ghosts, cod_infinite_warfare, counterstrike16, counterstrike_go,
-        counterstrikesource,dota2,halo5_guardians,halo_wars2, hearthstone, heroesofthestorm ,
+        counterstrike_go,
+        counterstrikesource,dota2,halo5_guardians,hearthstone, heroesofthestorm ,
         overwatch, rainbowsix_siege, starcraft2_lotv, leagueoflegends;
 }

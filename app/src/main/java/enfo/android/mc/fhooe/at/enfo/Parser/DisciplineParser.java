@@ -1,4 +1,4 @@
-package enfo.android.mc.fhooe.at.enfo.Model;
+package enfo.android.mc.fhooe.at.enfo.Parser;
 
 import android.widget.Toast;
 
@@ -20,6 +20,7 @@ import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
 
 public class DisciplineParser implements JSONTask.AsyncResponse {
     private final OnParseFinished mParseFinished;
+    List<Discipline> mDisciplineList = new ArrayList<>();
 
     public DisciplineParser(OnParseFinished _parseFinished){
         mParseFinished = _parseFinished;
@@ -28,8 +29,6 @@ public class DisciplineParser implements JSONTask.AsyncResponse {
     public interface OnParseFinished{
         void notifyParseFinished(List<Discipline> _disciplineList);
     }
-
-    List<Discipline> mDisciplineList = new ArrayList<>();
 
     @Override
     public void processFinish(String jsonResult) {

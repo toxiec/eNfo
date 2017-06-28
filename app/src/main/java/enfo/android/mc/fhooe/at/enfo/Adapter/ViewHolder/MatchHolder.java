@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
@@ -23,7 +25,6 @@ public class MatchHolder extends RecyclerView.ViewHolder{
     private TextView mMatchDate;
 
     private Tournament mTournament;
-    private Discipline mDiscipline;
     private Match mMatch;
     private Context mContext;
 
@@ -39,17 +40,48 @@ public class MatchHolder extends RecyclerView.ViewHolder{
 
     }
 
-    public void bindMatch(Match _match, Discipline _discipline){
-        mDiscipline = _discipline;
+    public void bindMatch(Match _match){
         mMatch = _match;
 
         if(mMatch.getmOpponentList()!=null){
+            String group_rounds;
+            StringBuilder builder = new StringBuilder();
+            builder.append("Group "+mMatch.getmGroupNumber()+" Round "+mMatch.getmRoundNumber());
+            group_rounds = builder.toString();
+            mMatchGroup.setText(group_rounds);
+
             mParticipant1.setText(mMatch.getmOpponentList().get(0).getmParticipant().getmName());
             mParticipant2.setText(mMatch.getmOpponentList().get(1).getmParticipant().getmName());
-            mParticipant1Score.setText(String.valueOf(mMatch.getmOpponentList().get(0).getmResult()));
-            mParticipant1Score.setText(String.valueOf(mMatch.getmOpponentList().get(1).getmResult()));
-            mMatchDate.setText(mMatch.getmDate());
 
+            //Win
+            if(mMatch.getmOpponentList().get(0).getmResult() == 1){
+                mParticipant1Score.setBackgroundResource(R.drawable.win_rectangle);
+            }else if(mMatch.getmOpponentList().get(0).getmResult() == 3){
+                mParticipant1Score.setBackgroundResource(R.drawable.loss_rectangle);
+            }else{
+                mParticipant1Score.setBackgroundResource(R.drawable.win_rectangle);
+            }
+
+
+            if(mMatch.getmOpponentList().get(1).getmResult() == 1){
+                mParticipant2Score.setBackgroundResource(R.drawable.win_rectangle);
+            }else if(mMatch.getmOpponentList().get(1).getmResult() == 3){
+                mParticipant2Score.setBackgroundResource(R.drawable.loss_rectangle);
+            }else{
+                mParticipant2Score.setBackgroundResource(R.drawable.win_rectangle);
+            }
+
+            mParticipant1Score.setText(String.valueOf(mMatch.getmOpponentList().get(0).getmScore()));
+            mParticipant2Score.setText(String.valueOf(mMatch.getmOpponentList().get(1).getmScore()));
+            SimpleDateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
+            SimpleDateFormat toDate = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
+            String date = mMatch.getmDate();
+            try {
+                String reformattedDate = toDate.format(fromDate.parse(date));
+                mMatchDate.setText(reformattedDate);
+            }catch (Exception e){
+                mMatchDate.setText(date);
+            }
         }
     }
 }
