@@ -76,8 +76,7 @@ public class TournamentActivity extends AppCompatActivity{
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabL_tournament);
             tabLayout.setupWithViewPager(mViewPager);
 
-            //setupCollapsingToolbar();
-            //setupToolbar();
+            getSupportActionBar().setTitle(EntityManager.getInstance().getCurrentTournament().getmName());
             setUpImageView();
         } else {
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();

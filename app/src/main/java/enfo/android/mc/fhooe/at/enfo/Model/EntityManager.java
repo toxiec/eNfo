@@ -8,6 +8,8 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
+import enfo.android.mc.fhooe.at.enfo.Entities.TournamentDetail;
+import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
 import enfo.android.mc.fhooe.at.enfo.Parser.DisciplineParser;
@@ -38,6 +40,8 @@ public class EntityManager {
 
     private Tournament mCurrentTournament;
     private Discipline mCurrentDiscipline;
+    private Participant mCurrentParticipant;
+    private TournamentDetail mCurrentTournamentDetail;
 
     private List<Discipline> mDisciplineList = new ArrayList<>();
     private List<Tournament> mRunningTournamentList = new ArrayList<>();
@@ -190,6 +194,11 @@ public class EntityManager {
         urlbuilder.append(mParticipantURL);
         if (_tournament != null) {
             urlbuilder.append(_tournament.getmID() + "/participants");
+            if(getCurrentTournamentDetail()!=null){
+                if(getCurrentTournamentDetail().getmParticipantType().equals("team")){
+                    urlbuilder.append("?with_lineup=1");
+                }
+            }
         }
         url = urlbuilder.toString();
 
@@ -202,6 +211,14 @@ public class EntityManager {
         mParticipantList = _participantList;
         mParticipantDownloadRunning = false;
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
+    }
+
+    public void requestPlayers(){
+        fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
+    }
+
+    public List<Player> getPlayerList(){
+        return getCurrentParticipant().getmLineup();
     }
 
     public List<Participant> getParticipantList() {
@@ -310,6 +327,23 @@ public class EntityManager {
     public Discipline getCurrentDiscipline(){
         return mCurrentDiscipline;
     }
+
+    public Participant getCurrentParticipant() {
+        return mCurrentParticipant;
+    }
+
+    public void setCurrentParticipant(Participant mCurrentParticipant) {
+        this.mCurrentParticipant = mCurrentParticipant;
+    }
+
+    public TournamentDetail getCurrentTournamentDetail() {
+        return mCurrentTournamentDetail;
+    }
+
+    public void setCurrentTournamentDetail(TournamentDetail _currentTournamentDetail) {
+        mCurrentTournamentDetail = _currentTournamentDetail;
+    }
+
 }
 
 

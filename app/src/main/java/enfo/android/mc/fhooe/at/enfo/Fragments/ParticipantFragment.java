@@ -1,6 +1,7 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import enfo.android.mc.fhooe.at.enfo.Activities.ParticipantActivity;
+import enfo.android.mc.fhooe.at.enfo.Activities.TournamentActivity;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.ParticipantAdapter;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
@@ -36,6 +39,7 @@ import enfo.android.mc.fhooe.at.enfo.Objects.ParticipantLogo;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.Stream;
 import enfo.android.mc.fhooe.at.enfo.R;
+import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
 public class ParticipantFragment extends Fragment implements ModelChangeListener {
@@ -44,8 +48,6 @@ public class ParticipantFragment extends Fragment implements ModelChangeListener
     private String mURL = "https://api.toornament.com/v1/tournaments/";
     private Tournament mTournament;
     private Discipline mDiscipline;
-    private List<Participant> mParticipantList = new ArrayList<>();
-    private String mJSONResult;
 
     private RecyclerView mParticipantRecylcerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -85,7 +87,16 @@ public class ParticipantFragment extends Fragment implements ModelChangeListener
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mParticipantRecylcerView.getContext(),
                     layoutManager.getOrientation());
             mParticipantRecylcerView.addItemDecoration(dividerItemDecoration);
+            ItemClickSupport.addTo(mParticipantRecylcerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
 
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    Participant participant = EntityManager.getInstance().getParticipantList().get(position);
+                    EntityManager.getInstance().setCurrentParticipant(participant);
+                    Intent i = new Intent(getActivity(), ParticipantActivity.class);
+                    startActivity(i);
+                }
+            });
         }else{
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }

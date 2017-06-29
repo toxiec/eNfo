@@ -23,7 +23,8 @@
             android:name=".Activities.DisciplineActivity"
             android:label="@string/title_activity_discipline"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.TournamentActivity"></activity>
+        <activity android:name=".Activities.TournamentActivity" />
+        <activity android:name=".Activities.ParticipantActivity"></activity>
     </application>
 
 </manifest>

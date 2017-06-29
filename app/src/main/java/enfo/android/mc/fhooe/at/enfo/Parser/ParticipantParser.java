@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
@@ -51,18 +52,21 @@ public class ParticipantParser implements JSONTask.AsyncResponse{
                 try {
                     JSONArray jsonArrayLineup = jsonObject.getJSONArray("lineup");
                     for(int j = 0; j<jsonArrayLineup.length(); j++){
-                        String playerName = jsonArrayLineup.getJSONObject(i).getString("name");
-                        String playerCountry = jsonArrayLineup.getJSONObject(i).getString("country");
-
-                        JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
+                        String playerName = jsonArrayLineup.getJSONObject(j).getString("name");
+                        String playerCountry = jsonArrayLineup.getJSONObject(j).getString("country");
                         List<String> playercustomField = new ArrayList<>();
-                        String fieldType = jsonObjectCustomField.getString("type");
-                        String fieldLabel = jsonObjectCustomField.getString("label");
-                        String fieldValue = jsonObjectCustomField.getString("value");
-                        playercustomField.add(fieldType);
-                        playercustomField.add(fieldLabel);
-                        playercustomField.add(fieldValue);
+                        try{
+                            JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
 
+                            String fieldType = jsonObjectCustomField.getString("type");
+                            String fieldLabel = jsonObjectCustomField.getString("label");
+                            String fieldValue = jsonObjectCustomField.getString("value");
+                            playercustomField.add(fieldType);
+                            playercustomField.add(fieldLabel);
+                            playercustomField.add(fieldValue);
+                        }catch (JSONException e){
+
+                        }
                         Player player = new Player(playerName, playerCountry, playercustomField);
                         playerList.add(player);
                     }

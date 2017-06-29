@@ -92,6 +92,7 @@ public class TournamentInformationParser implements JSONTask.AsyncResponse {
                     website, description, rules, prize, teamSizeMin, teamSizeMax, mStreamList);
 
             mTournamentDetail = tournamentDetail;
+            EntityManager.getInstance().setCurrentTournamentDetail(mTournamentDetail);
             fill_with_data();
             mParseFinished.notifyParseFinished(mTournamentInfoList);
         } catch (JSONException e) {
