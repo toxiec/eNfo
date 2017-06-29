@@ -58,7 +58,6 @@ public class DisciplineActivity extends AppCompatActivity{
                     //Log.i(TAG, mDiscipline.getmFullname());
                 }
             }
-
             mDisciplineImage = (ImageView) findViewById(R.id.app_bar_image);
             mViewPager = (ViewPager) findViewById(R.id.container);
             setUpViewPager(mViewPager, bundle);

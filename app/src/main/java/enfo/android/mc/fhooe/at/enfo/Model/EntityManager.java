@@ -194,11 +194,12 @@ public class EntityManager {
         urlbuilder.append(mParticipantURL);
         if (_tournament != null) {
             urlbuilder.append(_tournament.getmID() + "/participants");
-            if(getCurrentTournamentDetail()!=null){
+            urlbuilder.append("?with_lineup=1");
+            /*if(getCurrentTournamentDetail()!=null){
                 if(getCurrentTournamentDetail().getmParticipantType().equals("team")){
                     urlbuilder.append("?with_lineup=1");
                 }
-            }
+            }*/
         }
         url = urlbuilder.toString();
 

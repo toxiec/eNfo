@@ -73,14 +73,19 @@ public class MatchHolder extends RecyclerView.ViewHolder{
 
             mParticipant1Score.setText(String.valueOf(mMatch.getmOpponentList().get(0).getmScore()));
             mParticipant2Score.setText(String.valueOf(mMatch.getmOpponentList().get(1).getmScore()));
-            SimpleDateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
-            SimpleDateFormat toDate = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
-            String date = mMatch.getmDate();
-            try {
-                String reformattedDate = toDate.format(fromDate.parse(date));
-                mMatchDate.setText(reformattedDate);
-            }catch (Exception e){
-                mMatchDate.setText(date);
+
+            if(mMatch.getmDate().equals("null")){
+                mMatchDate.setText("");
+            }else{
+                SimpleDateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
+                SimpleDateFormat toDate = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
+                String date = mMatch.getmDate();
+                try {
+                    String reformattedDate = toDate.format(fromDate.parse(date));
+                    mMatchDate.setText(reformattedDate);
+                }catch (Exception e){
+                    mMatchDate.setText(date);
+                }
             }
         }
     }

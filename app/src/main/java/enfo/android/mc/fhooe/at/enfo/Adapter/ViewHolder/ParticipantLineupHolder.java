@@ -29,8 +29,13 @@ public class ParticipantLineupHolder  extends RecyclerView.ViewHolder {
 
     public void bindPlayer(Player _player){
         if(_player!=null){
+            if(_player.getmCountry().equals("null")){
+                mPlayerCountry.setText("");
+            }else{
+                mPlayerCountry.setText(_player.getmCountry());
+            }
             mPlayerName.setText(_player.getmName());
-            mPlayerCountry.setText(_player.getmCountry());
+
         }
     }
 }

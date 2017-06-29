@@ -40,11 +40,17 @@ public class ParticipantParser implements JSONTask.AsyncResponse{
                 String id = jsonObject.getString("id");
                 String name = jsonObject.getString("name");
 
-                JSONObject jsonLogoObject = jsonObject.getJSONObject("logo");
-                String icon_large = jsonLogoObject.getString("icon_large_square");
-                String extra_small = jsonLogoObject.getString("extra_small_square");
-                String medium_small = jsonLogoObject.getString("medium_small_square");
+                String icon_large ="";
+                String extra_small ="";
+                String medium_small="";
+                try{
+                    JSONObject jsonLogoObject = jsonObject.getJSONObject("logo");
+                    icon_large = jsonLogoObject.getString("icon_large_square");
+                    extra_small = jsonLogoObject.getString("extra_small_square");
+                    medium_small = jsonLogoObject.getString("medium_small_square");
+                }catch(JSONException e){
 
+                }
                 ParticipantLogo participantLogo = new ParticipantLogo(icon_large, extra_small, medium_small);
 
                 String country = jsonObject.getString("country");
