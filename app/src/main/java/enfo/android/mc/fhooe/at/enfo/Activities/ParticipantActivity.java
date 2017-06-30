@@ -2,16 +2,15 @@ package enfo.android.mc.fhooe.at.enfo.Activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.ParticipantLineupAdapter;
 import enfo.android.mc.fhooe.at.enfo.Adapter.SectionsPagerAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Fragments.ParticipantLineUpFragment;
+import enfo.android.mc.fhooe.at.enfo.Fragments.ParticipantMatchesFragment;
 import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
@@ -46,6 +45,9 @@ public class ParticipantActivity extends AppCompatActivity {
 
         ParticipantLineUpFragment lineUpFragment = new ParticipantLineUpFragment();
         mSectionsPagerAdapter.addFragment(lineUpFragment, "Lineup");
+
+        ParticipantMatchesFragment participantMatchesFragment = new ParticipantMatchesFragment();
+        mSectionsPagerAdapter.addFragment(participantMatchesFragment, "Matches");
 
         _viewPager.setAdapter(mSectionsPagerAdapter);
         //todo Matches des Teams anzeigen

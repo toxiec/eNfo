@@ -30,6 +30,7 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
 import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
+import enfo.android.mc.fhooe.at.enfo.Objects.MatchType;
 import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
@@ -74,14 +75,14 @@ public class MatchFragment extends Fragment implements ModelChangeListener {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                EntityManager.getInstance().requestMatches(mTournament);
+                EntityManager.getInstance().requestMatches(MatchType.allTournamentMatches);
             }
         });
         mMatchesRecycleView = (RecyclerView) view.findViewById(R.id.rv_matches);
-        EntityManager.getInstance().requestMatches(mTournament);
+
         mMatchesAdapter = new MatchAdapter(getActivity(), R.layout.item_match);
         mMatchesRecycleView.setAdapter(mMatchesAdapter);
-
+        EntityManager.getInstance().requestMatches(MatchType.allTournamentMatches);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mMatchesRecycleView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mMatchesRecycleView.getContext(),

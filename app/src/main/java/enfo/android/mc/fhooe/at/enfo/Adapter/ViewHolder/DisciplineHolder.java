@@ -7,9 +7,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.DisciplineAdapter;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
-import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 public class DisciplineHolder extends RecyclerView.ViewHolder{

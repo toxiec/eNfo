@@ -9,6 +9,7 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Entities.TournamentDetail;
+import enfo.android.mc.fhooe.at.enfo.Objects.MatchType;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
@@ -30,6 +31,7 @@ public class EntityManager {
     private boolean mParticipantDownloadRunning = false;
     private boolean mTournamentInformationDownloadRunning = false;
     private boolean mMatchDownloadRunning = false;
+    private boolean mParticipantMatchDownloadRunning = false;
 
     private final String mDisciplesURL = "https://api.toornament.com/v1/disciplines";
     private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1&discipline=";
@@ -49,6 +51,7 @@ public class EntityManager {
     private List<Participant> mParticipantList = new ArrayList<>();
     private List<TournamentInformationItem> mTournamentInformationList = new ArrayList<>();
     private List<Match> mMatchList = new ArrayList<>();
+    private List<Match> mParticipantMatchList = new ArrayList<>();
 
     private List<ModelChangeListener> mListenerList = new ArrayList<>();
 
@@ -214,11 +217,11 @@ public class EntityManager {
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
     }
 
-    public void requestPlayers(){
+    public void requestPlayers() {
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
     }
 
-    public List<Player> getPlayerList(){
+    public List<Player> getPlayerList() {
         return getCurrentParticipant().getmLineup();
     }
 
@@ -246,7 +249,7 @@ public class EntityManager {
         StringBuilder urlbuilder = new StringBuilder();
         String url = "";
         urlbuilder.append(mTournamentInformationURL);
-        if (_tournament != null){
+        if (_tournament != null) {
             urlbuilder.append(_tournament.getmID());
         }
         url = urlbuilder.toString();
@@ -255,23 +258,24 @@ public class EntityManager {
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.startDownload));
     }
 
-    public void updateTournamentInformationList(List<TournamentInformationItem> _tournamentDetailList){
+    public void updateTournamentInformationList(List<TournamentInformationItem> _tournamentDetailList) {
         mTournamentInformationList = _tournamentDetailList;
         mTournamentInformationDownloadRunning = false;
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
-    };
+    }
 
-    public List<TournamentInformationItem> getTournamentInformationList(){
+
+
+    public List<TournamentInformationItem> getTournamentInformationList() {
         return mTournamentInformationList;
     }
 
-    public boolean isTournamentInformationDownloadRunning(){
+    public boolean isTournamentInformationDownloadRunning() {
         return mTournamentInformationDownloadRunning;
     }
 
-
     // ############### Match #######################
-    public void requestMatches(Tournament _tournament) {
+    public void requestMatches(final MatchType _type) {
         JSONTask jsonTask = new JSONTask(new MatchParser(new MatchParser.OnParseFinished() {
             @Override
             public void notifyParseFinished(List<Match> _matchList) {
@@ -279,39 +283,87 @@ public class EntityManager {
                     mMatchDownloadRunning = false;
                     fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.errorOnDownload));
                 } else {
-                    updateMatches(_matchList);
+                    switch (_type){
+                        case allTournamentMatches: {
+                            if(_matchList == null){
+                                mMatchDownloadRunning = false;
+                                fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.errorOnDownload));
+                            }else{
+                                updateMatches(_matchList);
+                            }
+                            break;
+                        }case participantMatches: {
+                            if (_matchList == null) {
+                                mParticipantMatchDownloadRunning = false;
+                                fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.errorOnDownload));
+                            } else {
+                                updateParticipantMatches(_matchList);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }));
         StringBuilder urlbuilder = new StringBuilder();
         String url = "";
         urlbuilder.append(mMatchURL);
-        if (_tournament != null){
-            urlbuilder.append(_tournament.getmID()+"/matches");
-            urlbuilder.append("?sort=structure");
+
+        switch (_type){
+            case allTournamentMatches: {
+                if(getCurrentTournament() != null){
+                    urlbuilder.append(getCurrentTournament().getmID() + "/matches");
+                    urlbuilder.append("?sort=structure");
+                    mMatchDownloadRunning = true;
+                }
+                break;
+            }
+            case participantMatches: {
+                if(getCurrentTournament() != null){
+                    urlbuilder.append(getCurrentTournament().getmID() + "/matches");
+                    urlbuilder.append("?sort=structure");
+                    urlbuilder.append("&participant_id="+getCurrentParticipant().getmID());
+                    mParticipantMatchDownloadRunning = true;
+                }
+                break;
+            }
         }
 
         url = urlbuilder.toString();
-
         jsonTask.execute(url);
-        mMatchDownloadRunning = true;
-
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.startDownload));
     }
 
-    public void updateMatches(List<Match> _matchList){
+    public void updateMatches(List<Match> _matchList) {
         mMatchList = _matchList;
         mMatchDownloadRunning = false;
         fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
-    };
+    }
 
-    public List<Match> getMatchesList(){
+    public List<Match> getMatchesList() {
         return mMatchList;
     }
 
-    public boolean isMatchDownloadRunning(){
+    public boolean isMatchDownloadRunning() {
         return mMatchDownloadRunning;
     }
+
+    //############ Participant Matches ######################
+    public void updateParticipantMatches(List<Match> _matchList) {
+        mParticipantMatchList = _matchList;
+        mParticipantMatchDownloadRunning = false;
+        fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
+    }
+
+    public List<Match> getParticipantMatchesList() {
+        return mParticipantMatchList;
+    }
+
+    public boolean isParticipantMatchDownloadRunning() {
+        return mParticipantMatchDownloadRunning;
+    }
+
+    //##############################################################
 
     public void setCurrentTournament(Tournament _tournament){
         mCurrentTournament = _tournament;
@@ -344,6 +396,9 @@ public class EntityManager {
     public void setCurrentTournamentDetail(TournamentDetail _currentTournamentDetail) {
         mCurrentTournamentDetail = _currentTournamentDetail;
     }
+
+
+
 
 }
 

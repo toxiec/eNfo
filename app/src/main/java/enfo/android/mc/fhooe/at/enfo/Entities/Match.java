@@ -25,6 +25,9 @@ public class Match {
     private String mMatchFormat;
     private List<Opponent> mOpponentList;
 
+    public Match(){
+
+    }
     public Match(String _id,String _type,String _discipline,String _status, String _tournamentID, int _matchNumber,
                  int _stageNumber,int _groupNumber,int _roundNumber,String _date,String _timezone,
                  String _matchFormat,List<Opponent> _opponentList){

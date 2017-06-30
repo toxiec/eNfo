@@ -20,11 +20,11 @@ import enfo.android.mc.fhooe.at.enfo.Objects.MatchType;
  * Created by David on 26.06.2017.
  */
 
-public class MatchAdapter extends RecyclerView.Adapter<MatchHolder> {
+public class ParticipantMatchAdapter extends RecyclerView.Adapter<MatchHolder> {
     private Context mContext;
     private int mItemResource;
 
-    public MatchAdapter(Context _context, int _itemResource){
+    public ParticipantMatchAdapter(Context _context, int _itemResource){
         mContext = _context;
         mItemResource = _itemResource;
     }
@@ -37,12 +37,12 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchHolder> {
 
     @Override
     public void onBindViewHolder(MatchHolder holder, int position) {
-        Match match = EntityManager.getInstance().getMatchesList().get(position);
+        Match match = EntityManager.getInstance().getParticipantMatchesList().get(position);
         holder.bindMatch(match);
     }
 
     @Override
     public int getItemCount() {
-        return EntityManager.getInstance().getMatchesList().size();
+        return EntityManager.getInstance().getParticipantMatchesList().size();
     }
 }
