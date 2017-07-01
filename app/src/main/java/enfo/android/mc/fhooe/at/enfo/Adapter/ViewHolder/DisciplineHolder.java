@@ -58,6 +58,14 @@ public class DisciplineHolder extends RecyclerView.ViewHolder{
                 Glide.with(mContext).load(R.drawable.img_discipline_hots).into(mDisciplineImage);
                 break;
             }
+            case rainbowsix_siege :{
+                Glide.with(mContext).load(R.drawable.img_discipline_rss).into(mDisciplineImage);
+                break;
+            }
+            case halo5_guardians :{
+                Glide.with(mContext).load(R.drawable.img_discipline_halo5).into(mDisciplineImage);
+                break;
+            }
             default:
                 mDisciplineImage.setImageDrawable(null);
                 break;

@@ -1,17 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/srl_activity_main"
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabL_activity_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_discipline"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:background="?attr/colorPrimary"
+            android:elevation="6dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/container_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_below="@+id/tabL_activity_main"
+            android:layout_alignParentStart="true" />
+
 </RelativeLayout>

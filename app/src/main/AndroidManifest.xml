@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_enfo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -25,6 +25,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.TournamentActivity" />
         <activity android:name=".Activities.ParticipantActivity"></activity>
+        <activity
+            android:name=".Support.AndroidDatabaseManager"
+            android:label="@string/app_name"/>
     </application>
 
 </manifest>

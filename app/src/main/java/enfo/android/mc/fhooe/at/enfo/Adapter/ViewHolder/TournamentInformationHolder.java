@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 import enfo.android.mc.fhooe.at.enfo.R;
 
@@ -37,7 +38,12 @@ public class TournamentInformationHolder extends ViewHolder {
                 mInformationText.setText("");
             }else{
                 if (_item.getmHeadLine().equals("Discipline")) {
-                    mInformationText.setText(_discipline.getmFullname());
+                    if(_discipline != null){
+                        mInformationText.setText(_discipline.getmFullname());
+                    }else{
+                        mInformationText.setText(EntityManager.getInstance().getCurrentTournament().getmDiscipline());
+                    }
+
                 } else {
                     mInformationText.setText(_item.getmText());
                 }

@@ -60,17 +60,27 @@ public class MatchParser  implements JSONTask.AsyncResponse{
 
                     String partId = jsonObjectParticipant.getString("id");
                     String partName = jsonObjectParticipant.getString("name");
-                    String partCountry = jsonObjectParticipant.getString("country");
-                    Participant participant = new Participant(partId, partName, null, partCountry, null, null);
-
-                    int result = jsonArrayOpponents.getJSONObject(j).getInt("result");
-                    int rank = 0;
+                    String partCountry="";
                     try{
-                        rank = jsonArrayOpponents.getJSONObject(j).getInt("rank");
-                    }catch(JSONException e){
+                        partCountry = jsonObjectParticipant.getString("country");
+                    }catch (JSONException e){
 
                     }
-                    int score = jsonArrayOpponents.getJSONObject(j).getInt("score");
+                    Participant participant = new Participant(partId, partName, null, partCountry, null, null);
+
+                    int result = 0;
+                    int rank = 0;
+                    int score = 0;
+                    try{
+                        result = jsonArrayOpponents.getJSONObject(j).getInt("result");
+                    }catch (JSONException e){}
+                    try{
+                        rank = jsonArrayOpponents.getJSONObject(j).getInt("rank");
+                    }catch(JSONException e){}
+                    try{
+                        score = jsonArrayOpponents.getJSONObject(j).getInt("score");
+                    } catch (JSONException e){}
+
                     boolean forfeit = jsonArrayOpponents.getJSONObject(j).getBoolean("forfeit");
                     Opponent opponent = new Opponent(number, participant, result, rank, score, forfeit);
                     mOpponentList.add(opponent);

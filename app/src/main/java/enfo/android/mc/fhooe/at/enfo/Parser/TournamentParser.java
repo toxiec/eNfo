@@ -50,7 +50,7 @@ public class TournamentParser implements JSONTask.AsyncResponse {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date_start = sdf.parse(dateStart);
 
-                String dateEnd = jsonobject.getString("date_start");
+                String dateEnd = jsonobject.getString("date_end");
                 Date date_end = sdf.parse(dateEnd);
 
                 boolean online = jsonobject.getBoolean("online");

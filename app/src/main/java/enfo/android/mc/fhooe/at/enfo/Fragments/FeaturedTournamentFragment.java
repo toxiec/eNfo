@@ -39,14 +39,11 @@ import enfo.android.mc.fhooe.at.enfo.R;
 public class FeaturedTournamentFragment extends Fragment implements ModelChangeListener {
 
     private static final String TAG = "FTF";
-    private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1";
-    private String mJSONResult;
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
     private static final String TOURNAMENT_KEY = "tournament_key";
     private Discipline mDiscipline;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<Tournament> mTournamentList = new ArrayList<>();
     private RecyclerView mFeaturedTournamentsRecyclerView;
     private TournamentsAdapter mTournamentsAdapter;
 

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Player {
     private String mName;
-    private String mCountry;
+    private CountryID mCountry;
     private List<String> mCustomField;
 
-    public Player(String _name, String _country, List<String> _customField){
+    public Player(String _name, CountryID _country, List<String> _customField){
         mName = _name;
         mCountry = _country;
         mCustomField = _customField;
@@ -21,7 +21,7 @@ public class Player {
         return mName;
     }
 
-    public String getmCountry() {
+    public CountryID getmCountry() {
         return mCountry;
     }
 

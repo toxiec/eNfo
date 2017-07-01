@@ -17,7 +17,7 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
-public class TournamentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class TournamentHolder extends RecyclerView.ViewHolder{
 
     private ImageView mDisciplineLogo;
     private TextView mDisciplineName;
@@ -37,7 +37,6 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
         mDate = (TextView) _itemView.findViewById(R.id.tv_date);
         mTournamentName = (TextView) _itemView.findViewById(R.id.tv_tournament_name);
         mLocation = (TextView) _itemView.findViewById(R.id.tv_location);
-        _itemView.setOnClickListener(this);
     }
 
 
@@ -45,33 +44,41 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
         mTournament = _tournament;
         mDiscipline = _discipline;
 
-        switch(mDiscipline.getmId()){
-            case counterstrike_go : {
+        switch(mTournament.getmDiscipline()){
+            case "counterstrike_go" : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_csgo).into(mDisciplineLogo);
                 break;
             }
-            case dota2 : {
+            case "dota2" : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_dota2).into(mDisciplineLogo);
                 break;
             }
-            case hearthstone : {
+            case "hearthstone" : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_hs).into(mDisciplineLogo);
                 break;
             }
-            case leagueoflegends : {
+            case "leagueoflegends" : {
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_lol).into(mDisciplineLogo);
                 break;
             }
-            case starcraft2_lotv:{
+            case "starcraft2_lotv":{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_sc2_lotv).into(mDisciplineLogo);
                 break;
             }
-            case overwatch:{
+            case "overwatch":{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_ow).into(mDisciplineLogo);
                 break;
             }
-            case heroesofthestorm:{
+            case "heroesofthestorm":{
                 Glide.with(mContext).load(R.drawable.image_featured_tournament_hots).into(mDisciplineLogo);
+                break;
+            }
+            case "rainbowsix_siege":{
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_rss).into(mDisciplineLogo);
+                break;
+            }
+            case "halo5_guardians":{
+                Glide.with(mContext).load(R.drawable.image_featured_tournament_halo5).into(mDisciplineLogo);
                 break;
             }
             default:{
@@ -79,7 +86,11 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
             }
 
         }
-        mDisciplineName.setText(mDiscipline.getmName());
+        if(mDiscipline != null){
+            mDisciplineName.setText(mDiscipline.getmName());
+        }else{
+            mDisciplineName.setText(mTournament.getmDiscipline());
+        }
         //Convert the Date to dd.MM.yyyy
         Format formatter = new SimpleDateFormat("dd.MM.yyyy");
         String date = formatter.format(_tournament.getmDateStart());
@@ -89,13 +100,6 @@ public class TournamentHolder extends RecyclerView.ViewHolder implements View.On
             mLocation.setText("Undefined Location");
         }else{
             mLocation.setText(_tournament.getmLocation());
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mTournament != null) {
-            //Toast.makeText(mContext, "Clicked on " + mTournament.getmName(), Toast.LENGTH_SHORT ).show();
         }
     }
 }

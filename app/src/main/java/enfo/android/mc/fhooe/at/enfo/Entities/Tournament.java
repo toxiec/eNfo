@@ -47,6 +47,9 @@ public class Tournament implements Serializable{
     /**Size of a tournament. Represents the expected number of participants it'll be able to manage.*/
     private int mSize;
 
+    public Tournament(){
+
+    }
 
     public Tournament(String _ID, String _discipline, String _name, String _fullName,
                       String _status, Date _dateStart, Date _dateEnd, boolean _online,
@@ -64,6 +67,54 @@ public class Tournament implements Serializable{
         mLocation = _location;
         mCountry = _country;
         mSize = _size;
+    }
+
+    public void setmID(String mID) {
+        this.mID = mID;
+    }
+
+    public void setmDiscipline(String mDiscipline) {
+        this.mDiscipline = mDiscipline;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setmFullName(String mFullName) {
+        this.mFullName = mFullName;
+    }
+
+    public void setmStatus(String mStatus) {
+        this.mStatus = mStatus;
+    }
+
+    public void setmDateStart(Date mDateStart) {
+        this.mDateStart = mDateStart;
+    }
+
+    public void setmDateEnd(Date mDateEnd) {
+        this.mDateEnd = mDateEnd;
+    }
+
+    public void setmOnline(boolean mOnline) {
+        this.mOnline = mOnline;
+    }
+
+    public void setmPublic(boolean mPublic) {
+        this.mPublic = mPublic;
+    }
+
+    public void setmLocation(String mLocation) {
+        this.mLocation = mLocation;
+    }
+
+    public void setmCountry(String mCountry) {
+        this.mCountry = mCountry;
+    }
+
+    public void setmSize(int mSize) {
+        this.mSize = mSize;
     }
 
     public String getmID() {

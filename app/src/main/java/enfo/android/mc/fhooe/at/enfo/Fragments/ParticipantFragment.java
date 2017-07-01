@@ -60,16 +60,12 @@ public class ParticipantFragment extends Fragment implements ModelChangeListener
 
         Bundle bundle = getArguments();
         if (NetworkCheck.isNetworkAvailable(getActivity())) {
-            if (bundle != null) {
-                if (bundle.containsKey(TOURNAMENT_KEY)) {
-                    mTournament = (Tournament) bundle.getSerializable(TOURNAMENT_KEY);
-                    //Log.i(TAG, mTournament.getmName());
 
-                }
-                if (bundle.containsKey(DISCIPLINE_KEY)) {
-                    mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
-                }
-            }
+            mTournament = EntityManager.getInstance().getCurrentTournament();
+
+            mDiscipline = EntityManager.getInstance().getCurrentDiscipline();
+
+
             EntityManager.getInstance().addModelChangeListener(this);
             mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_participant);
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

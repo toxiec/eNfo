@@ -5,7 +5,6 @@ package enfo.android.mc.fhooe.at.enfo.Objects;
  */
 
 public enum DisciplineID {
-        counterstrike_go,
-        counterstrikesource,dota2,halo5_guardians,hearthstone, heroesofthestorm ,
+        counterstrike_go,dota2,halo5_guardians,hearthstone, heroesofthestorm ,
         overwatch, rainbowsix_siege, starcraft2_lotv, leagueoflegends;
 }

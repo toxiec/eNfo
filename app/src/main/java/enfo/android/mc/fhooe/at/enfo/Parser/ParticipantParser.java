@@ -1,15 +1,19 @@
 package enfo.android.mc.fhooe.at.enfo.Parser;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
+import enfo.android.mc.fhooe.at.enfo.Objects.CountryID;
 import enfo.android.mc.fhooe.at.enfo.Objects.ParticipantLogo;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 
@@ -18,6 +22,7 @@ import enfo.android.mc.fhooe.at.enfo.Objects.Player;
  */
 
 public class ParticipantParser implements JSONTask.AsyncResponse{
+    private static final String TAG ="ParticipantParser";
     private List<Participant> mParticipantList = new ArrayList<>();
     private final OnParseFinished mParseFinished;
 
@@ -52,14 +57,26 @@ public class ParticipantParser implements JSONTask.AsyncResponse{
 
                 }
                 ParticipantLogo participantLogo = new ParticipantLogo(icon_large, extra_small, medium_small);
+                String country = "";
+                try{
+                    country = jsonObject.getString("country");
+                }catch(JSONException e){
 
-                String country = jsonObject.getString("country");
+                }
+
+                Log.i(TAG, country);
                 List<Player> playerList = new ArrayList<>();
                 try {
                     JSONArray jsonArrayLineup = jsonObject.getJSONArray("lineup");
                     for(int j = 0; j<jsonArrayLineup.length(); j++){
                         String playerName = jsonArrayLineup.getJSONObject(j).getString("name");
-                        String playerCountry = jsonArrayLineup.getJSONObject(j).getString("country");
+
+                        CountryID countryID;
+                        try{
+                            countryID = CountryID.valueOf(jsonArrayLineup.getJSONObject(j).getString("country"));
+                        }catch(IllegalArgumentException e){
+                            continue;
+                        }
                         List<String> playercustomField = new ArrayList<>();
                         try{
                             JSONObject jsonObjectCustomField = new JSONObject("custom_fields");
@@ -73,7 +90,7 @@ public class ParticipantParser implements JSONTask.AsyncResponse{
                         }catch (JSONException e){
 
                         }
-                        Player player = new Player(playerName, playerCountry, playercustomField);
+                        Player player = new Player(playerName, countryID, playercustomField);
                         playerList.add(player);
                     }
                 }catch(JSONException _e){

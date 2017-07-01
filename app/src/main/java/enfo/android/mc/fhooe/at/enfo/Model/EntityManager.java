@@ -1,9 +1,12 @@
 package enfo.android.mc.fhooe.at.enfo.Model;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
+import enfo.android.mc.fhooe.at.enfo.Database.DatabaseHandler;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
@@ -52,8 +55,11 @@ public class EntityManager {
     private List<TournamentInformationItem> mTournamentInformationList = new ArrayList<>();
     private List<Match> mMatchList = new ArrayList<>();
     private List<Match> mParticipantMatchList = new ArrayList<>();
+    private List<Tournament> mFavoriteList = new ArrayList<>();
 
     private List<ModelChangeListener> mListenerList = new ArrayList<>();
+
+    private DatabaseHandler db_local;
 
     private EntityManager() {
 
@@ -170,6 +176,9 @@ public class EntityManager {
             }
             case running: {
                 return mRunningTournamentList;
+            }
+            case favorites: {
+                return mFavoriteList;
             }
         }
         return mRunningTournamentList;
@@ -397,8 +406,20 @@ public class EntityManager {
         mCurrentTournamentDetail = _currentTournamentDetail;
     }
 
+    public void requestFavoriteList(Context _context){
+        DatabaseHandler db_local = new DatabaseHandler(_context);
+        List<Tournament> favoriteList = db_local.getAllEntries();
+        updateFavoriteList(favoriteList);
+    }
 
+    public void updateFavoriteList(List<Tournament> _favoriteList){
+        mFavoriteList = _favoriteList;
+        fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
+    }
 
+    public List<Tournament> getFavoriteList(){
+        return mFavoriteList;
+    }
 
 }
 

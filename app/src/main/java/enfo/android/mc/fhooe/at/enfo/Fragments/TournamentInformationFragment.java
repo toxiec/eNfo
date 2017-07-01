@@ -60,15 +60,14 @@ public class TournamentInformationFragment extends Fragment implements ModelChan
 
         Bundle bundle = getArguments();
         if(NetworkCheck.isNetworkAvailable(getActivity())){
-            if(bundle!=null){
-                if (bundle.containsKey(TOURNAMENT_KEY)) {
-                    mTournament = (Tournament) bundle.getSerializable(TOURNAMENT_KEY);
+
+            mTournament = EntityManager.getInstance().getCurrentTournament();
                     //Log.i(TAG, mTournament.getmName());
 
-                }if(bundle.containsKey(DISCIPLINE_KEY)){
-                    mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
-                }
-            }
+
+            mDiscipline = EntityManager.getInstance().getCurrentDiscipline();
+
+
 
             EntityManager.getInstance().addModelChangeListener(this);
             mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_tournament_information);

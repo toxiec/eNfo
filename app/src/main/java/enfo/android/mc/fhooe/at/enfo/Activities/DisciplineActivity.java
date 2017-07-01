@@ -106,6 +106,14 @@ public class DisciplineActivity extends AppCompatActivity{
                     Glide.with(this).load(R.drawable.app_bar_image_hots).into(mDisciplineImage);
                     break;
                 }
+                case rainbowsix_siege:{
+                    Glide.with(this).load(R.drawable.app_bar_image_rss).into(mDisciplineImage);
+                    break;
+                }
+                case halo5_guardians:{
+                    Glide.with(this).load(R.drawable.app_bar_image_halo5).into(mDisciplineImage);
+                    break;
+                }
 
                 default:{
                     Glide.with(this).load(R.drawable.app_bar_image_csgo).into(mDisciplineImage);

@@ -46,14 +46,29 @@ public class TournamentInformationParser implements JSONTask.AsyncResponse {
             String discipline = jsonObject.getString("discipline");
             String name = jsonObject.getString("name");
             String fullname = jsonObject.getString("full_name");
-            String status = jsonObject.getString("full_name");
+            String status = jsonObject.getString("status");
+
 
             String dateStart = jsonObject.getString("date_start");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date_start = sdf.parse(dateStart);
+
+            Date date_start = new Date();
+            try{
+                date_start = sdf.parse(dateStart);
+            }catch(ParseException e){
+
+            }
 
             String dateEnd = jsonObject.getString("date_end");
-            Date date_end = sdf.parse(dateEnd);
+            Date date_end = new Date();
+            try{
+                date_end = sdf.parse(dateEnd);
+            }catch(ParseException e){
+
+            }
+
+
+
 
             String timeZone = jsonObject.getString("timezone");
             boolean online = jsonObject.getBoolean("online");
@@ -98,15 +113,17 @@ public class TournamentInformationParser implements JSONTask.AsyncResponse {
         } catch (JSONException e) {
             mParseFinished.notifyParseFinished(mTournamentInfoList);
             e.printStackTrace();
-        } catch (ParseException e) {
-            mParseFinished.notifyParseFinished(mTournamentInfoList);
-            e.printStackTrace();
         }
     }
 
     public void fill_with_data() {
         mTournamentInfoList.clear();
-        mTournamentInfoList.add(new TournamentInformationItem("Discipline", EntityManager.getInstance().getCurrentDiscipline().getmName()));
+        if(EntityManager.getInstance().getCurrentDiscipline()!=null){
+            mTournamentInfoList.add(new TournamentInformationItem("Discipline", EntityManager.getInstance().getCurrentDiscipline().getmName()));
+        }else{
+            mTournamentInfoList.add(new TournamentInformationItem("Discipline", EntityManager.getInstance().getCurrentTournament().getmDiscipline()));
+        }
+
         if (mTournamentDetail.getmParticipantType().equals("team")) {
             mTournamentInfoList.add(new TournamentInformationItem("Participants", Integer.toString(mTournamentDetail.getmSize()) + " Teams"));
         } else {

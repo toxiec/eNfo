@@ -7,4 +7,5 @@ package enfo.android.mc.fhooe.at.enfo.Objects;
 public enum TournamentType {
     featured,
     running,
+    favorites,
 }

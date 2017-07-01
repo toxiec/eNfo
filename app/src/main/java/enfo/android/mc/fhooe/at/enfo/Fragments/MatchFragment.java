@@ -60,16 +60,14 @@ public class MatchFragment extends Fragment implements ModelChangeListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_matches, container, false);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.containsKey(TOURNAMENT_KEY)) {
-                mTournament = (Tournament) bundle.getSerializable(TOURNAMENT_KEY);
+
+
+        mTournament = EntityManager.getInstance().getCurrentTournament();
                 //Log.i(TAG, mTournament.getmName());
 
-            }if(bundle.containsKey(DISCIPLINE_KEY)){
-                mDiscipline = (Discipline) bundle.getSerializable(DISCIPLINE_KEY);
-            }
-        }
+
+        mDiscipline = EntityManager.getInstance().getCurrentDiscipline();
+
         EntityManager.getInstance().addModelChangeListener(this);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_matches);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
