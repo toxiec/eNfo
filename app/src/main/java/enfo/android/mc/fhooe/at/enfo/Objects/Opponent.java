@@ -15,6 +15,7 @@ public class Opponent {
     private int mRank;
     private int mScore;
     private boolean mForfeit;
+
     public Opponent(int _number, Participant _participant, int _result,
                     int _rank, int _score, boolean _forfeit){
         mNumber = _number;

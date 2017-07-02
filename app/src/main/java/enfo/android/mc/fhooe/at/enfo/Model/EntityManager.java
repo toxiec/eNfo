@@ -8,6 +8,7 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Database.DatabaseHandler;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
+import enfo.android.mc.fhooe.at.enfo.Entities.Game;
 import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
@@ -17,6 +18,7 @@ import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
 import enfo.android.mc.fhooe.at.enfo.Parser.DisciplineParser;
+import enfo.android.mc.fhooe.at.enfo.Parser.GameParser;
 import enfo.android.mc.fhooe.at.enfo.Parser.MatchParser;
 import enfo.android.mc.fhooe.at.enfo.Parser.ParticipantParser;
 import enfo.android.mc.fhooe.at.enfo.Parser.TournamentInformationParser;
@@ -35,6 +37,7 @@ public class EntityManager {
     private boolean mTournamentInformationDownloadRunning = false;
     private boolean mMatchDownloadRunning = false;
     private boolean mParticipantMatchDownloadRunning = false;
+    private boolean mGameDownloadRunning = false;
 
     private final String mDisciplesURL = "https://api.toornament.com/v1/disciplines";
     private final String mFeaturedTournamentsURL = "https://api.toornament.com/v1/tournaments?featured=1&discipline=";
@@ -47,6 +50,7 @@ public class EntityManager {
     private Discipline mCurrentDiscipline;
     private Participant mCurrentParticipant;
     private TournamentDetail mCurrentTournamentDetail;
+    private Match mCurrentMatch;
 
     private List<Discipline> mDisciplineList = new ArrayList<>();
     private List<Tournament> mRunningTournamentList = new ArrayList<>();
@@ -56,7 +60,7 @@ public class EntityManager {
     private List<Match> mMatchList = new ArrayList<>();
     private List<Match> mParticipantMatchList = new ArrayList<>();
     private List<Tournament> mFavoriteList = new ArrayList<>();
-
+    private List<Game> mGameList = new ArrayList<>();
     private List<ModelChangeListener> mListenerList = new ArrayList<>();
 
     private DatabaseHandler db_local;
@@ -283,6 +287,45 @@ public class EntityManager {
         return mTournamentInformationDownloadRunning;
     }
 
+    // ############### Game ########################
+
+    public void requestGame(){
+        JSONTask jsonTask = new JSONTask(new GameParser(new GameParser.OnParseFinished() {
+            @Override
+            public void notifyParseFinished(List<Game> _gameList) {
+                if(_gameList == null){
+                    mGameDownloadRunning = false;
+                    fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.errorOnDownload));
+                }else{
+                    updateGames(_gameList);
+                }
+            }
+        }));
+
+        StringBuilder urlbuilder = new StringBuilder();
+        String url = "";
+        urlbuilder.append(mMatchURL);
+        urlbuilder.append(getCurrentTournament().getmID());
+        urlbuilder.append("/matches/"+getCurrentMatch().getmID());
+        urlbuilder.append("/games");
+        mGameDownloadRunning = true;
+        url = urlbuilder.toString();
+        jsonTask.execute(url);
+        fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.startDownload));
+    }
+
+    private void updateGames(List<Game> _gameList){
+        mGameList = _gameList;
+        mGameDownloadRunning = false;
+        fireChangeOccured(new ChangeEvent(ChangeEvent.EventType.finishDownload));
+    }
+
+    public List<Game> getGameList(){
+        return mGameList;
+    }
+    public boolean isGameDownloading(){
+        return mGameDownloadRunning;
+    }
     // ############### Match #######################
     public void requestMatches(final MatchType _type) {
         JSONTask jsonTask = new JSONTask(new MatchParser(new MatchParser.OnParseFinished() {
@@ -404,6 +447,14 @@ public class EntityManager {
 
     public void setCurrentTournamentDetail(TournamentDetail _currentTournamentDetail) {
         mCurrentTournamentDetail = _currentTournamentDetail;
+    }
+
+    public void setCurrentMatch(Match _match){
+        mCurrentMatch = _match;
+    }
+
+    public Match getCurrentMatch(){
+        return mCurrentMatch;
     }
 
     public void requestFavoriteList(Context _context){

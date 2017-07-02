@@ -1,5 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,14 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import enfo.android.mc.fhooe.at.enfo.Activities.GameActivity;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.MatchAdapter;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.ParticipantLineupAdapter;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.ParticipantMatchAdapter;
+import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Model.ChangeEvent;
 import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.Objects.MatchType;
 import enfo.android.mc.fhooe.at.enfo.R;
+import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
 /**
@@ -58,6 +62,17 @@ public class ParticipantMatchesFragment extends Fragment implements ModelChangeL
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mParticipantMatchesRecylcerView.getContext(),
                     layoutManager.getOrientation());
             mParticipantMatchesRecylcerView.addItemDecoration(dividerItemDecoration);
+
+            ItemClickSupport.addTo(mParticipantMatchesRecylcerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    Match match = EntityManager.getInstance().getParticipantMatchesList().get(position);
+                    EntityManager.getInstance().setCurrentMatch(match);
+                    Intent i = new Intent(getActivity(), GameActivity.class);
+                    startActivity(i);
+                }
+            });
 
         }else{
             Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();

@@ -24,10 +24,11 @@
             android:label="@string/title_activity_discipline"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.TournamentActivity" />
-        <activity android:name=".Activities.ParticipantActivity"></activity>
+        <activity android:name=".Activities.ParticipantActivity" />
         <activity
             android:name=".Support.AndroidDatabaseManager"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
+        <activity android:name=".Activities.GameActivity"></activity>
     </application>
 
 </manifest>

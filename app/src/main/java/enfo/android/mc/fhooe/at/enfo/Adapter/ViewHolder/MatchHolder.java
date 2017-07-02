@@ -75,7 +75,7 @@ public class MatchHolder extends RecyclerView.ViewHolder{
             mParticipant2Score.setText(String.valueOf(mMatch.getmOpponentList().get(1).getmScore()));
 
             if(mMatch.getmDate().equals("null")){
-                mMatchDate.setText("");
+                mMatchDate.setText("-");
             }else{
                 SimpleDateFormat fromDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
                 SimpleDateFormat toDate = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");

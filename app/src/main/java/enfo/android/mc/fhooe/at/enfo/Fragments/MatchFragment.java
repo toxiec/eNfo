@@ -1,5 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import enfo.android.mc.fhooe.at.enfo.Activities.GameActivity;
+import enfo.android.mc.fhooe.at.enfo.Activities.ParticipantActivity;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.MatchAdapter;
 import enfo.android.mc.fhooe.at.enfo.Adapter.RecyclerAdapter.TournamentsAdapter;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
@@ -89,7 +92,11 @@ public class MatchFragment extends Fragment implements ModelChangeListener {
         ItemClickSupport.addTo(mMatchesRecycleView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getActivity(), "Clicked on Match "+ mMatchList.get(position).getmID(), Toast.LENGTH_SHORT).show();
+                Match match = EntityManager.getInstance().getMatchesList().get(position);
+                EntityManager.getInstance().setCurrentMatch(match);
+                Intent i = new Intent(getActivity(), GameActivity.class);
+                startActivity(i);
+                //Toast.makeText(getActivity(), "Clicked on Match "+ mMatchList.get(position).getmID(), Toast.LENGTH_SHORT).show();
             }
         });
         return view;

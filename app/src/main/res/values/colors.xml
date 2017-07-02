@@ -6,4 +6,5 @@
     <color name="text_color_white">#FFFFFF</color>
     <color name="win_color_green">#04B431</color>
     <color name="loss_color_red">#FE2E2E</color>
+    <color name="sky_blue">#0080FF</color>
 </resources>

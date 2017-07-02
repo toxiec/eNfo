@@ -92,9 +92,9 @@ public class MatchParser  implements JSONTask.AsyncResponse{
             }
 
             mParseFinished.notifyParseFinished(mMatchList);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            mParseFinished.notifyParseFinished(mMatchList);
-        }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mParseFinished.notifyParseFinished(mMatchList);
+            }
     }
 }

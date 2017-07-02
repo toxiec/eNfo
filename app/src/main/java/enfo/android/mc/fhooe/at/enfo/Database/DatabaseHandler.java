@@ -21,6 +21,7 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 
 
 public class DatabaseHandler extends SQLiteOpenHelper {
+    private static final String TAG = "DatabaseHandler";
     private static int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "FAVORITES_DB";
     private static final String TABLE_NAME = "FAVORITES_TABLE";
@@ -115,9 +116,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         long insert = db.insert(TABLE_NAME, null, values);
         if(insert == -1){
-            Toast.makeText(mContext, "Not inserted correctly", Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"Not inserted correctly");
         }else{
-            Toast.makeText(mContext, "Inserted correctly", Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"Inserted correctly");;
         }
         db.close(); // Closing database connection
     }

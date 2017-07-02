@@ -41,10 +41,7 @@ public class TournamentActivity extends AppCompatActivity{
     private Tournament mTournament;
     private boolean tournamentIsInDatabase;
 
-    /**
-     * Key to get Discipline Data from the Bundle
-     */
-    private static final String DISCIPLINE_KEY = "discipline_key";
+
     /**
      * Discipline which was selected from MainActivity ListView
      */
