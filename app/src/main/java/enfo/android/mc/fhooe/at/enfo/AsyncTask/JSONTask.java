@@ -13,10 +13,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
+/**
+ * Async Task which Fetches the JSON Result from the Toornament.com API
+ */
 public class JSONTask extends AsyncTask<String, String, String> {
 
+
     public interface AsyncResponse {
+        /**
+         * Posts the fetches JSONResult
+         * @param jsonResult
+         */
         void processFinish(String jsonResult);
     }
 
@@ -26,7 +33,6 @@ public class JSONTask extends AsyncTask<String, String, String> {
     private final String API_KEY_HTTP_HEADER = "X-Api-Key";
     private HttpURLConnection connection = null;
     private BufferedReader reader = null;
-    private ProgressDialog dialog;
     private AsyncResponse mListener = null;
 
 

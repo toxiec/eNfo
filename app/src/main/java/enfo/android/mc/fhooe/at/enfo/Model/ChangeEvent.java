@@ -2,16 +2,15 @@ package enfo.android.mc.fhooe.at.enfo.Model;
 
 import java.util.EventObject;
 
-/**
- * Created by David on 27.06.2017.
- */
 
+/**
+ * Event Types which can occure
+ */
 public class ChangeEvent extends EventObject {
 
     public final EventType mEventType;
 
     public enum EventType{
-        reload,
         startDownload,
         finishDownload,
         errorOnDownload,

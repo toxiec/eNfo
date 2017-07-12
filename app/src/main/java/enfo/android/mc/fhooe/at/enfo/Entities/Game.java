@@ -5,9 +5,14 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 
 public class Game {
+    /**Game's number.*/
     private int mNumber;
+    /**Game's status: "pending" means it hasn’t started yet; "running" means it has started
+     * but not ended yet; "completed" indicates the game is finished.*/
     private String mStatus;
+    /**List of Opponents who play in the Game*/
     private List<Opponent> mOpponentList;
+    /**The Map on which the Game takes place*/
     private String mMap;
 
     public Game(int _number, String _status, List<Opponent> _oppentList, String _map){

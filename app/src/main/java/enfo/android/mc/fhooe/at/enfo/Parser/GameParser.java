@@ -15,9 +15,7 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Participant;
 import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 
 /**
- * Created by David on 02.07.2017.
- */
-
+ * Parses JSON to Game Object*/
 public class GameParser implements JSONTask.AsyncResponse {
     private final OnParseFinished mParseFinished;
     List<Game> mGameList = new ArrayList<>();

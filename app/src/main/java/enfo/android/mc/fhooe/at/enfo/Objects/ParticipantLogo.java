@@ -1,6 +1,8 @@
 package enfo.android.mc.fhooe.at.enfo.Objects;
 
-
+/**
+ * Contains the different Logo urls a Participant can have
+ */
 public class ParticipantLogo {
     private String mIcon_large_square;
     private String mExtra_small_square;

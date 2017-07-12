@@ -22,6 +22,8 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHandler";
+
+
     private static int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "FAVORITES_DB";
     private static final String TABLE_NAME = "FAVORITES_TABLE";

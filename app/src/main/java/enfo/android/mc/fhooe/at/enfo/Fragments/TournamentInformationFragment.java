@@ -39,6 +39,9 @@ import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
 
+/**
+ * Displays the TournamentInformation
+ */
 public class TournamentInformationFragment extends Fragment implements ModelChangeListener{
     private static final String TAG = "TIFragemtn";
     private Tournament mTournament;

@@ -5,6 +5,7 @@ import android.view.View;
 
 import enfo.android.mc.fhooe.at.enfo.R;
 
+/**Provides a simple Method to add a OnClickListener to a Recyclerview*/
 public class ItemClickSupport {
     private final RecyclerView mRecyclerView;
     private OnItemClickListener mOnItemClickListener;

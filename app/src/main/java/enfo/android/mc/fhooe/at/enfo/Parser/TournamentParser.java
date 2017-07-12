@@ -13,11 +13,9 @@ import java.util.List;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
-
 /**
- * Created by David on 27.06.2017.
+ * Parses JSON to Tournament Object
  */
-
 public class TournamentParser implements JSONTask.AsyncResponse {
     private final OnParseFinished mParseFinished;
     List<Tournament> mTournamentList = new ArrayList<>();

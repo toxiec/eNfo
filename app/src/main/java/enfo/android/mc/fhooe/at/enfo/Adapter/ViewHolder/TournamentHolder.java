@@ -17,15 +17,24 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Match;
 import enfo.android.mc.fhooe.at.enfo.Entities.Tournament;
 import enfo.android.mc.fhooe.at.enfo.R;
 
+/**
+ * Holds the Information for Tournaments in the RecyclerView
+ */
 public class TournamentHolder extends RecyclerView.ViewHolder{
-
+    /**Displays the Discipline Logo */
     private ImageView mDisciplineLogo;
+    /**Displays the Discipline Name*/
     private TextView mDisciplineName;
+    /**Displays the Tournament Start Date */
     private TextView mDate;
+    /**Displays the Tournament Name */
     private TextView mTournamentName;
+    /**Displays the Location where the Tournament takes place*/
     private TextView mLocation;
 
+    /**Current selected Tournament*/
     private Tournament mTournament;
+    /**Current selected Discipline*/
     private Discipline mDiscipline;
     private Context mContext;
 
@@ -39,7 +48,11 @@ public class TournamentHolder extends RecyclerView.ViewHolder{
         mLocation = (TextView) _itemView.findViewById(R.id.tv_location);
     }
 
-
+    /**
+     * Binds the Tournament Information to the item fields.
+     * @param _discipline which data should be bind to the item fields.
+     * @param _tournament which data should be bind to the item fields.
+     */
     public void bindTournament(Tournament _tournament, Discipline _discipline){
         mTournament = _tournament;
         mDiscipline = _discipline;

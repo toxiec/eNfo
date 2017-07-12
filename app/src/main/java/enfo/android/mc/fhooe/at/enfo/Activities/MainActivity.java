@@ -37,6 +37,9 @@ import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
+/**
+ *  Class which contains a Tab Layout to Display Disciplines and Favorite Tournaments
+ */
 public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
 

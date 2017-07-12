@@ -36,12 +36,15 @@ import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.AsyncTask.JSONTask;
 import enfo.android.mc.fhooe.at.enfo.R;
 
+/**Displays the Featured Tournaments*/
 public class FeaturedTournamentFragment extends Fragment implements ModelChangeListener {
 
     private static final String TAG = "FTF";
     /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
     private static final String DISCIPLINE_KEY = "discipline_key";
+    /**Key which is used to receive the passed Tournament Object from DisciplineActivity*/
     private static final String TOURNAMENT_KEY = "tournament_key";
+    /**Current selected Discipline*/
     private Discipline mDiscipline;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mFeaturedTournamentsRecyclerView;

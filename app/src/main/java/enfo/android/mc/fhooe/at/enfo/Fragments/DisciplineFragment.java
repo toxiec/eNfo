@@ -25,10 +25,7 @@ import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
-/**
- * Created by David on 01.07.2017.
- */
-
+/**Displays the Disciplines in a Grid Layout*/
 public class DisciplineFragment extends Fragment implements ModelChangeListener {
     /**Key to get Discipline Data from the Bundle */
     private static final String DISCIPLINE_KEY = "discipline_key";

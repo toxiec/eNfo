@@ -12,6 +12,9 @@ import enfo.android.mc.fhooe.at.enfo.Adapter.ViewHolder.DisciplineHolder;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 
+/**
+ *Provide a binding from Discipline to views that are displayed within a RecyclerView.
+ */
 public class DisciplineAdapter extends RecyclerView.Adapter<DisciplineHolder>{
     private Context mContext;
     private int mItemResource;

@@ -10,9 +10,17 @@ import com.bumptech.glide.Glide;
 import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.R;
 
+/**
+ * Holds the Information for Disciplines in the RecyclerView
+ */
 public class DisciplineHolder extends RecyclerView.ViewHolder{
+
+    /**Contains the Image for a specific Discipline*/
     private ImageView mDisciplineImage;
+
     private Context mContext;
+
+    /**Current selected Discipline*/
     private Discipline mDiscipline;
 
     public DisciplineHolder(Context _context , View _itemView) {
@@ -21,6 +29,10 @@ public class DisciplineHolder extends RecyclerView.ViewHolder{
         mDisciplineImage = (ImageView) _itemView.findViewById(R.id.iv_discipline);
     }
 
+    /**
+     * Binds the Discipline Information to the item fields.
+     * @param _discipline which data should be bind to the item fields.
+     */
     public void bindDiscipline(Discipline _discipline){
         mDiscipline = _discipline;
 

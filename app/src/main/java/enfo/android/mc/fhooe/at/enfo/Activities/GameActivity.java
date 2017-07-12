@@ -14,10 +14,18 @@ import enfo.android.mc.fhooe.at.enfo.Model.ModelChangeListener;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
+/**
+ * Activity which shows Single Games of a Match
+ */
 public class GameActivity extends AppCompatActivity implements ModelChangeListener {
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    /**Adapter which returns Fragment for Tabs*/
     private GameAdapter mGameAdapter;
+
     private RecyclerView mGameRecycleView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

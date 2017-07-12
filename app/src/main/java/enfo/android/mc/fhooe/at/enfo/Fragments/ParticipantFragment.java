@@ -42,6 +42,10 @@ import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
+/**
+ * Displays the Participants
+ */
+
 public class ParticipantFragment extends Fragment implements ModelChangeListener {
     private static final String DISCIPLINE_KEY = "discipline_key";
     private static final String TOURNAMENT_KEY = "tournament_key";

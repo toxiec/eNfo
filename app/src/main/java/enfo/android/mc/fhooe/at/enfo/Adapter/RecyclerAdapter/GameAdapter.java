@@ -11,9 +11,8 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Game;
 import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 
 /**
- * Created by David on 02.07.2017.
+ *Provide a binding from Game to views that are displayed within a RecyclerView.
  */
-
 public class GameAdapter extends RecyclerView.Adapter<GameHolder> {
     private Context mContext;
     private int mItemResource;

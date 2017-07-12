@@ -17,9 +17,8 @@ import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.MatchType;
 
 /**
- * Created by David on 26.06.2017.
+ *Provide a binding from Match to views that are displayed within a RecyclerView.
  */
-
 public class MatchAdapter extends RecyclerView.Adapter<MatchHolder> {
     private Context mContext;
     private int mItemResource;

@@ -1,9 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Objects;
 
-/**
- * Created by David on 27.06.2017.
- */
-
+/**Tournament types of tournaments */
 public enum TournamentType {
     featured,
     running,

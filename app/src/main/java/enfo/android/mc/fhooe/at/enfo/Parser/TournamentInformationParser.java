@@ -18,9 +18,8 @@ import enfo.android.mc.fhooe.at.enfo.Objects.Stream;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentInformationItem;
 
 /**
- * Created by David on 28.06.2017.
+ * Parses JSON to TournamentInformation Object
  */
-
 public class TournamentInformationParser implements JSONTask.AsyncResponse {
     private List<TournamentDetail> mTournamentDetailList = new ArrayList<>();
     private List<TournamentInformationItem> mTournamentInfoList = new ArrayList<>();

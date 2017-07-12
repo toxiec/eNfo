@@ -2,13 +2,14 @@ package enfo.android.mc.fhooe.at.enfo.Objects;
 
 import java.util.List;
 
-/**
- * Created by David on 08.06.2017.
- */
+
 
 public class Player {
+    /**Player name*/
     private String mName;
+    /**Players Country */
     private CountryID mCountry;
+    /**A list full with custom fields (not used in the project)*/
     private List<String> mCustomField;
 
     public Player(String _name, CountryID _country, List<String> _customField){

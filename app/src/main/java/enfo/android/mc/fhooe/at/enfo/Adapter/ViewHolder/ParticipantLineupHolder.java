@@ -16,10 +16,17 @@ import enfo.android.mc.fhooe.at.enfo.R;
  * Created by David on 29.06.2017.
  */
 
+/**
+ * Holds the Information for Participant Lineup in the RecyclerView
+ */
 public class ParticipantLineupHolder  extends RecyclerView.ViewHolder {
+
     private Context mContext;
+    /**Displays the Team Member Name*/
     private TextView mPlayerName;
+    /**Displays the Team Member Country*/
     private TextView mPlayerCountry;
+    /**Displays the Country Flag of the team members country */
     private ImageView mCountryFlag;
 
     public ParticipantLineupHolder(Context _context, View _itemView) {
@@ -31,6 +38,10 @@ public class ParticipantLineupHolder  extends RecyclerView.ViewHolder {
         mCountryFlag = (ImageView) _itemView.findViewById(R.id.img_player_country_flag);
     }
 
+    /**
+     * Binds the Player Information to the item fields.
+     * @param _player which data should be bind to the item fields.
+     */
     public void bindPlayer(Player _player){
         if(_player!=null){
             if(_player.getmCountry().equals("null")){

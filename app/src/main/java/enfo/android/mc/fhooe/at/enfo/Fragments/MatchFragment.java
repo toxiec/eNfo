@@ -38,38 +38,14 @@ import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 
-/**
- * Created by David on 26.06.2017.
- */
-
+/**Displays the Matches of a Tournament */
 public class MatchFragment extends Fragment implements ModelChangeListener {
-    private static final String TAG = "MatchFragment";
-    private final String mMatchesURL = "https://api.toornament.com/v1/tournaments/";
-    private String mJSONResult;
-    /**Key which is used to receive the passed Discipline Object from DisciplineActivity*/
-    private static final String DISCIPLINE_KEY = "discipline_key";
-    private static final String TOURNAMENT_KEY = "tournament_key";
-    private Discipline mDiscipline;
-    private Tournament mTournament;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private MatchAdapter mMatchesAdapter;
     private RecyclerView mMatchesRecycleView;
-    private List<Match> mMatchList = new ArrayList<>();
-    private List<Participant> mParticipantList = new ArrayList<>();
-    private List<Opponent> mOpponentList = new ArrayList<>();
-    private Match mMatch;
-
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_matches, container, false);
-
-
-
-        mTournament = EntityManager.getInstance().getCurrentTournament();
-                //Log.i(TAG, mTournament.getmName());
-
-
-        mDiscipline = EntityManager.getInstance().getCurrentDiscipline();
 
         EntityManager.getInstance().addModelChangeListener(this);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_matches);

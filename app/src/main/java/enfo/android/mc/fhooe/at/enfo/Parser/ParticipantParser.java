@@ -18,9 +18,8 @@ import enfo.android.mc.fhooe.at.enfo.Objects.ParticipantLogo;
 import enfo.android.mc.fhooe.at.enfo.Objects.Player;
 
 /**
- * Created by David on 28.06.2017.
+ * Parses JSON to Participant Object
  */
-
 public class ParticipantParser implements JSONTask.AsyncResponse{
     private static final String TAG ="ParticipantParser";
     private List<Participant> mParticipantList = new ArrayList<>();

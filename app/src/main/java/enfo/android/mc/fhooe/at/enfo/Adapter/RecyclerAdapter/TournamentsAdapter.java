@@ -13,6 +13,9 @@ import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
 
 
+/**
+ *Provide a binding from Tournament to views that are displayed within a RecyclerView.
+ */
 public class TournamentsAdapter extends RecyclerView.Adapter<TournamentHolder> {
     private Context mContext;
     private int mItemResource;

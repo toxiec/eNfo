@@ -24,10 +24,8 @@ import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
-/**
- * Created by David on 01.07.2017.
- */
 
+/**Displays the Favorited Tournaments*/
 public class FavoriteFragment extends Fragment implements ModelChangeListener {
     private RecyclerView mFavoriteRecyclerView;
     private TournamentsAdapter mTournamentAdapter;

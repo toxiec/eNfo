@@ -27,7 +27,7 @@ import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 /**
- * Class which contains a Tab Layout to Display Featured, Running and Completed Tournaments for
+ * Class which contains a Tab Layout to Display Featured, Running Tournaments for
  * a specific Discipline
  */
 public class DisciplineActivity extends AppCompatActivity{

@@ -36,6 +36,9 @@ import enfo.android.mc.fhooe.at.enfo.Objects.TournamentType;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 
+/**
+ * Displays all Running Tournaments of the selected Discipline
+ */
 public class RunningFragment extends Fragment implements ModelChangeListener {
 
     private static final String TAG = "FTF";

@@ -15,10 +15,18 @@ import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.R;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
+/**
+ * Class which contains a Tab Layout to Display the Team Layout and Matches where the selected Team
+ * participates
+ */
 public class ParticipantActivity extends AppCompatActivity {
+    /**The current selected Tournament*/
     private Tournament mTournament;
+    /**The current selected Discipline*/
     private Discipline mDiscipline;
+    /**The {@link ViewPager} that will host the section contents.*/
     private ViewPager mViewPager;
+    /**Adapter which returns Fragment for Tabs*/
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     @Override
@@ -40,6 +48,10 @@ public class ParticipantActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create SectionsPagerAdapter and add Fragments to it
+     * @param _viewPager
+     */
     private void setUpViewPager(ViewPager _viewPager){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 

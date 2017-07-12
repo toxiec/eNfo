@@ -15,9 +15,8 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Discipline;
 import enfo.android.mc.fhooe.at.enfo.Objects.DisciplineID;
 
 /**
- * Created by David on 27.06.2017.
+ * Parses JSON to Discipline Object
  */
-
 public class DisciplineParser implements JSONTask.AsyncResponse {
     private final OnParseFinished mParseFinished;
     List<Discipline> mDisciplineList = new ArrayList<>();

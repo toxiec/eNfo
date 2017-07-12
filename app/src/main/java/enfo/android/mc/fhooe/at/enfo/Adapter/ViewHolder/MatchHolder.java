@@ -16,15 +16,26 @@ import enfo.android.mc.fhooe.at.enfo.R;
  * Created by David on 26.06.2017.
  */
 
+/**
+ * Holds the Information for Matches in the RecyclerView
+ */
 public class MatchHolder extends RecyclerView.ViewHolder{
+    /**Displays the Match Group*/
     private TextView mMatchGroup;
+    /**Displays the first Opponent Name*/
     private TextView mParticipant1;
+    /**Displays the second Opponent Name*/
     private TextView mParticipant2;
+    /**Displays the Score of the first Opponent*/
     private TextView mParticipant1Score;
+    /**Displays the Score of the second Opponent*/
     private TextView mParticipant2Score;
+    /**Display when the Match took place */
     private TextView mMatchDate;
 
+    /**Current selected Tournament*/
     private Tournament mTournament;
+    /**Current selected Match*/
     private Match mMatch;
     private Context mContext;
 
@@ -40,6 +51,10 @@ public class MatchHolder extends RecyclerView.ViewHolder{
 
     }
 
+    /**
+     * Binds the Match Information to the item fields.
+     * @param _match which data should be bind to the item fields.
+     */
     public void bindMatch(Match _match){
         mMatch = _match;
 

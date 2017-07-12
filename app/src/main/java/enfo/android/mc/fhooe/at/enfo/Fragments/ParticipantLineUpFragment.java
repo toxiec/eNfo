@@ -23,9 +23,8 @@ import enfo.android.mc.fhooe.at.enfo.Support.ItemClickSupport;
 import enfo.android.mc.fhooe.at.enfo.Support.NetworkCheck;
 
 /**
- * Created by David on 29.06.2017.
+ * Displays the Participant Lineup
  */
-
 public class ParticipantLineUpFragment extends Fragment implements ModelChangeListener {
     private RecyclerView mParticipantLineupRecylcerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;

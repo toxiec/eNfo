@@ -14,9 +14,8 @@ import enfo.android.mc.fhooe.at.enfo.Model.EntityManager;
 import enfo.android.mc.fhooe.at.enfo.Objects.Opponent;
 
 /**
- * Created by David on 28.06.2017.
+ * Parses JSON to Match Object
  */
-
 public class MatchParser  implements JSONTask.AsyncResponse{
     private final OnParseFinished mParseFinished;
     List<Match> mMatchList = new ArrayList<>();

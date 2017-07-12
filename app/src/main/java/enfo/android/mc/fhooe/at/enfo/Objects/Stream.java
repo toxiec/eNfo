@@ -1,8 +1,6 @@
 package enfo.android.mc.fhooe.at.enfo.Objects;
 
-/**
- * Created by David on 03.06.2017.
- */
+
 
 public class Stream {
 

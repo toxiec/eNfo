@@ -10,15 +10,20 @@ import enfo.android.mc.fhooe.at.enfo.Entities.Game;
 import enfo.android.mc.fhooe.at.enfo.R;
 
 /**
- * Created by David on 02.07.2017.
+ * Holds the Information for Games in the RecyclerView
  */
-
 public class GameHolder extends RecyclerView.ViewHolder {
+    /**Displays the Round number*/
     private TextView mRound;
+    /**Displays the first Opponent name*/
     private TextView mParticipant1;
+    /**Display the second Opponent name*/
     private TextView mParticipant2;
+    /**Displays the Score of the first Opponent*/
     private TextView mParticipant1Score;
+    /**Displays the Score of the second Opponent*/
     private TextView mParticipant2Score;
+    /**Displays the Map name, on which the Game was played on*/
     private TextView mMap;
     private Context mContext;
 
@@ -33,6 +38,10 @@ public class GameHolder extends RecyclerView.ViewHolder {
         mMap = (TextView) itemView.findViewById(R.id.tv_game_mapName);
     }
 
+    /**
+     * Binds the Game Information to the item fields.
+     * @param _game which data should be bind to the item fields.
+     */
     public void bindGame(Game _game){
         if(_game != null){
             mRound.setText(String.valueOf(_game.getmNumber()));
